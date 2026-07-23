@@ -1,0 +1,3789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Preparación Física - Sofía</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #080a11;
+            --card-bg: #111524;
+            --card-hover: #171d31;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #1e2538;
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.15);
+            --accent-amber: #f59e0b;
+            --accent-amber-glow: rgba(245, 158, 11, 0.15);
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.15);
+            --accent-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 15px;
+            padding-bottom: 80px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* BANNER */
+        .banner {
+            width: 100%;
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--accent-purple);
+            filter: blur(80px);
+            opacity: 0.25;
+            border-radius: 50%;
+        }
+
+        .banner h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .banner p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.highlight {
+            background: linear-gradient(90deg, var(--accent-purple), #7c3aed);
+            border-color: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 2px 10px var(--accent-purple-glow);
+        }
+
+        .badge.green-highlight {
+            background: linear-gradient(90deg, var(--accent-green), #059669);
+            border-color: var(--accent-green);
+            color: #fff;
+            box-shadow: 0 2px 10px var(--accent-green-glow);
+        }
+
+        /* WEIGHT PROGRESS BAR */
+        .weight-progress-container {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .weight-progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .weight-bar-bg {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .weight-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), #059669);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* GLOBAL WEEK NAVIGATOR */
+        .week-navigator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 10px 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .week-nav-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: inherit;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .week-nav-btn:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .week-label-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .week-label-subtitle {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .week-label-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* NAVIGATION TABS */
+        .nav-tabs {
+            display: flex;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 4px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            background-color: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--accent-purple-glow);
+        }
+
+        /* MAIN CONTENT SECTIONS */
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* CARDS */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* FORM CONTROLS */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row > * {
+            flex: 1;
+        }
+
+        select, input, textarea {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            width: 100%;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 2px var(--accent-purple-glow);
+        }
+
+        .btn {
+            background-color: var(--accent-purple);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px var(--accent-purple-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-success {
+            background-color: var(--accent-green);
+            box-shadow: 0 4px 12px var(--accent-green-glow);
+        }
+
+        /* CALENDAR MODULE */
+        .calendar-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .cal-day-row {
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .cal-day-row.active-gym { border-left: 4px solid var(--primary); }
+        .cal-day-row.active-rest { border-left: 4px solid var(--text-muted); }
+
+        .cal-day-name {
+            width: 110px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .cal-day-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .cal-badge-gym { background-color: rgba(59, 130, 246, 0.1); color: var(--primary); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .cal-badge-rest { background-color: rgba(156, 163, 175, 0.1); color: var(--text-muted); border: 1px solid rgba(156, 163, 175, 0.2); }
+
+        .cal-day-desc {
+            flex: 1;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .cal-day-steps {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* ROUTINE MODULE */
+        .routine-day-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .routine-day-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .routine-day-btn.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .routine-day-btn-title {
+            font-size: 0.9rem;
+        }
+
+        .routine-day-btn-date {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .routine-day-btn.active .routine-day-btn-date {
+            color: var(--primary);
+        }
+
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .exe-card {
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px 12px 12px 4px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .exe-card.core { border-left-color: var(--accent-purple); }
+
+        .exe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .exe-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .exe-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .exe-tag-row {
+            display: flex;
+            gap: 4px;
+        }
+
+        .exe-badge {
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .exe-badge.fuerza { background-color: rgba(59, 130, 246, 0.1); color: var(--primary); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .exe-badge.cor { background-color: rgba(168, 85, 247, 0.1); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.2); }
+        .exe-badge.superserie { background-color: rgba(219, 39, 119, 0.15); color: #db2777; border: 1px solid rgba(219, 39, 119, 0.3); }
+
+        .exe-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .exe-stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .exe-stat-lbl {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .exe-stat-val {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .exe-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .exe-details-btn {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            align-self: flex-start;
+        }
+
+        .exe-details-content {
+            display: none;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-left: 2px solid var(--primary);
+            padding-left: 8px;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        /* LOGGER SUBFORM */
+        .logger-area {
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .logger-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .logger-title span {
+            color: var(--accent-green);
+        }
+
+        .logger-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .logger-table th {
+            text-align: center;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding-bottom: 4px;
+        }
+
+        .logger-table td {
+            padding: 3px 2px;
+            text-align: center;
+        }
+
+        .logger-table input {
+            padding: 6px 4px;
+            font-size: 0.8rem;
+            text-align: center;
+            border-radius: 6px;
+        }
+
+        .btn-check-set {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background-color: rgba(255, 255, 255, 0.02);
+            color: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: all 0.2s ease;
+            font-size: 0.75rem;
+        }
+
+        .btn-check-set.checked {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        /* CHARTS & GRAPHS */
+        .chart-container {
+            width: 100%;
+            height: 220px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            padding: 10px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* WEIGHT MODULE */
+        .history-table-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .history-table th, .history-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background-color: rgba(0, 0, 0, 0.4);
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .text-loss { color: var(--accent-green); font-weight: 700; }
+        .text-gain { color: var(--accent-red); font-weight: 700; }
+
+        /* DATA IMPORT EXPORT */
+        .data-textarea {
+            font-family: monospace;
+            font-size: 0.75rem;
+            height: 120px;
+            resize: none;
+        }
+
+        /* CHECKBOX CUSTOM STYLING */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.02);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .checkbox-container input {
+            width: auto;
+            cursor: pointer;
+        }
+
+        /* STEPS LIST STYLING */
+        .steps-week-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .steps-day-row {
+            display: grid;
+            grid-template-columns: 120px 100px 1fr;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            gap: 10px;
+        }
+
+        .steps-day-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-card-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .stat-card-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* FOOTER BRANDING */
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        /* GIFT BANNER & ONBOARDING */
+        @keyframes pulse-glowing {
+            0% { box-shadow: 0 0 5px rgba(219, 39, 119, 0.4); }
+            50% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.8), 0 0 25px rgba(124, 58, 237, 0.6); }
+            100% { box-shadow: 0 0 5px rgba(219, 39, 119, 0.4); }
+        }
+
+        .gift-banner {
+            background: linear-gradient(135deg, #db2777 0%, #7c3aed 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            font-weight: 700;
+            color: #fff;
+            animation: pulse-glowing 2.5s infinite;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- GIFT POPUP MODAL (First time only) -->
+    <div id="gift-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(8,10,17,0.92); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+        <div class="card" style="width:100%; max-width:400px; text-align:center; gap:16px; border:2px solid var(--accent-purple); box-shadow:0 0 30px var(--accent-purple-glow); padding: 25px; background-color: var(--card-bg); border-radius: 16px; display:flex; flex-direction:column;">
+            <span style="font-size:3rem; display:block; margin-bottom:5px;">🎁</span>
+            <h2 style="color:#fff; font-weight:800; font-size:1.5rem; margin: 0;">¡Hola Sofía!</h2>
+            <img src="foto_sofia.jpg" alt="Sofía y Nico" style="width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.6); margin: 5px 0;">
+            <p style="font-size:1rem; color:var(--text-main); line-height:1.5; font-weight:600; margin: 0;">Es un regalo para ayudarte a cumplir el objetivo. 💖</p>
+            <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.4; margin: 0;">Este panel te ayudará a registrar tu peso, pasos diarios y tu rutina de fuerza de forma sencilla en tu ordenador o móvil.</p>
+            <button class="btn" style="width:100%; background: linear-gradient(90deg, #db2777, #7c3aed); margin-top: 5px;" onclick="closeGiftModal()">Empezar Entrenamientos 🚀</button>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- GIFT BANNER FOR SOFIA -->
+        <div class="gift-banner" id="gift-banner">
+            <span>🎁 ¡Es un regalo para ayudarte a cumplir el objetivo! 💖</span>
+        </div>
+
+        <!-- BANNER -->
+        <div class="banner">
+            <h1>PREPARACIÓN FÍSICA</h1>
+            <p>Planificación de Fuerza y Rendimiento <span id="profile-title-name"></span></p>
+            <div class="profile-badges">
+                <span class="badge highlight" id="profile-badge-name">Atleta</span>
+                <span class="badge" id="profile-badge-age">Edad</span>
+                <span class="badge" id="profile-badge-height">Altura</span>
+                <span class="badge" id="banner-weight">--.- kg</span>
+                <span class="badge green-highlight" id="banner-target-badge">Meta</span>
+                <span class="badge" id="github-sync-badge" style="cursor:pointer; background-color: rgba(148, 163, 184, 0.1); border: 1px solid rgba(148, 163, 184, 0.2); color: #cbd5e1; display: inline-flex; align-items: center; gap: 6px;" onclick="openSyncModal()">
+                    <span id="sync-dot" style="width: 8px; height: 8px; border-radius: 50%; background-color: #64748b; display: inline-block; transition: background-color 0.3s ease;"></span>
+                    <span id="sync-text">GitHub no conectado</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- TARGET PROGRESS BAR -->
+        <div class="weight-progress-container">
+            <div class="weight-progress-header">
+                <span>Progreso de Peso Saludable</span>
+                <span id="weight-progress-percent">0%</span>
+            </div>
+            <div class="weight-bar-bg">
+                <div class="weight-bar-fill" id="weight-progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- GLOBAL WEEK NAVIGATOR -->
+        <div class="week-navigator">
+            <button class="week-nav-btn" onclick="changeWeek(-1)">◄ Sem. Anterior</button>
+            <div class="week-label-container">
+                <span class="week-label-subtitle" id="week-number-display">Semana 1</span>
+                <span class="week-label-title" id="week-label-display">Cargando...</span>
+            </div>
+            <button class="week-nav-btn" onclick="changeWeek(1)">Sem. Siguiente ►</button>
+        </div>
+        
+        <button class="btn btn-secondary" style="margin-top:-5px; padding: 8px 12px; font-size: 0.75rem;" onclick="goToCurrentWeek()">Volver a Sem. Actual ↺</button>
+
+        <!-- NAVIGATION TABS -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="switchSection('tab-calendar')">📅 Calendario</button>
+            <button class="nav-tab" onclick="switchSection('tab-routine')">🏋️ Rutina Gym</button>
+            <button class="nav-tab" onclick="switchSection('tab-weight')">⚖️ Peso</button>
+            <button class="nav-tab" onclick="switchSection('tab-steps')">👟 Pasos</button>
+            <button class="nav-tab" onclick="switchSection('tab-data')">🔗 Datos</button>
+        </nav>
+
+        <!-- TAB CONTENT: CALENDAR -->
+        <section id="tab-calendar" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📅 Agenda Semanal</h2>
+                    <span class="card-subtitle">Organización y metas diarias</span>
+                </div>
+                <div class="calendar-grid" id="calendar-grid-container">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚙️ Ajustes de Rutina</h2>
+                    <span class="card-subtitle">Selecciona tus días de gimnasio</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="select-gymday1">Día de Fuerza 1</label>
+                        <select id="select-gymday1" onchange="updateGymDaysConfig()">
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes" selected>Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sábado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="select-gymday2">Día de Fuerza 2</label>
+                        <select id="select-gymday2" onchange="updateGymDaysConfig()">
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves" selected>Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sábado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: ROUTINE -->
+        <section id="tab-routine" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" id="routine-block-header">Cargando Fase...</h2>
+                    <span class="card-subtitle" id="routine-completion-badge" style="display:none; background-color:rgba(16,185,129,0.2); color:var(--accent-green); padding:2px 8px; border-radius:10px; font-size:0.7rem; font-weight:700;">¡Sesión Completada! ✓</span>
+                </div>
+
+                <div class="routine-day-select" id="routine-day-select-container">
+                    <button class="routine-day-btn active" id="rday-btn-1" onclick="switchRoutineDay(1)">
+                        <span class="routine-day-btn-title">Día 1</span>
+                        <span class="routine-day-btn-date" id="rday-date-1">--/--</span>
+                    </button>
+                    <button class="routine-day-btn" id="rday-btn-2" onclick="switchRoutineDay(2)">
+                        <span class="routine-day-btn-title">Día 2</span>
+                        <span class="routine-day-btn-date" id="rday-date-2">--/--</span>
+                    </button>
+                </div>
+
+                <div id="routine-session-card" style="display:none; flex-direction:column; gap:10px; margin-bottom: 5px;">
+                    <div style="font-size:0.8rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+                        <span id="routine-session-title" style="font-weight:700; color:#fff;">Entrenamiento de Fuerza</span>
+                        <span id="routine-session-date">Martes 09 de Junio</span>
+                    </div>
+                </div>
+
+                <div class="exercise-list" id="exercise-list-container">
+                    <!-- Dynamic exercises list -->
+                </div>
+
+                <div class="card" id="routine-empty-card" style="display:none; text-align:center; padding:30px 20px; align-items:center; justify-content:center;">
+                    <span style="font-size:2rem; margin-bottom:10px;">🛋️</span>
+                    <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.4;">No hay rutinas de gimnasio programadas para esta semana. El plan inicial contempla las primeras 16 semanas de entrenamiento.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: WEIGHT -->
+        <section id="tab-weight" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚖️ Registro de Peso Corporal</h2>
+                    <span class="card-subtitle">Control de peso y evolución</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="weight-input-date">Fecha:</label>
+                        <input type="date" id="weight-input-date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="weight-input-value">Peso (kg):</label>
+                        <input type="number" id="weight-input-value" step="0.1" placeholder="Ej. 89.2">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="weight-input-notes">Notas / Estado:</label>
+                    <input type="text" id="weight-input-notes" placeholder="Ej. Pesaje en ayunas, buen descanso.">
+                </div>
+                <button class="btn btn-success" onclick="addWeightLog()">💾 Guardar Peso</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📈 Evolución Histórica</h2>
+                    <span class="card-subtitle">Gráfico de progreso</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📑 Historial de Pesajes</h2>
+                    <span class="card-subtitle">Tabla de registros</span>
+                </div>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Peso</th>
+                                <th>Variación</th>
+                                <th>Notas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weight-history-tbody">
+                            <!-- Dynamic rendering -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: STEPS -->
+        <section id="tab-steps" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">👟 Registro de Pasos Diarios (NEAT)</h2>
+                    <span class="card-subtitle">Registra la actividad diaria de la semana</span>
+                </div>
+                <div class="steps-week-list" id="steps-week-inputs-container">
+                    <!-- Dynamic 7 days inputs -->
+                </div>
+                <button class="btn btn-success" style="background-color: var(--accent-purple); box-shadow: 0 4px 12px var(--accent-purple-glow);" onclick="saveWeeklySteps()">💾 Guardar Pasos de la Semana</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Actividad Semanal</h2>
+                    <span class="card-subtitle">Gráfico de barras de pasos</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="stepsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📉 Métricas y Objetivos</h2>
+                    <span class="card-subtitle">Estadísticas semanales</span>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-card-title">Pasos Totales</span>
+                        <span class="stat-card-value" id="stats-total-steps">0</span>
+                        <span class="stat-card-desc">Pasos acumulados</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card-title">Promedio Diario</span>
+                        <span class="stat-card-value" id="stats-avg-steps">0</span>
+                        <span class="stat-card-desc" id="stats-goal-comparison">vs Meta (8k)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card-title">Energía Estimada</span>
+                        <span class="stat-card-value" id="stats-kcal-burned">0 kcal</span>
+                        <span class="stat-card-desc">Gasto por caminata</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card-title">Objetivo Pasos</span>
+                        <div style="display:flex; align-items:center; gap: 4px;">
+                            <input type="number" id="input-steps-goal" value="8000" style="padding: 2px 6px; font-size: 0.9rem; font-weight:800; max-width:80px; background:rgba(0,0,0,0.2);" onchange="updateStepsGoalConfig()">
+                        </div>
+                        <span class="stat-card-desc">Configurar meta</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: DATA / SYNC -->
+        <section id="tab-data" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🔗 Sincronización Local con Google Drive</h2>
+                    <span class="card-subtitle">Vincula tus archivos CSV de la misma carpeta</span>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background-color:rgba(0,0,0,0.2); border-radius:8px; border:1px solid var(--border);">
+                        <div>
+                            <div style="font-weight:700; font-size:0.85rem;">registro_peso_semanal.csv</div>
+                            <div style="font-size:0.7rem; color:var(--text-muted);" id="weight-file-status">No vinculado</div>
+                        </div>
+                        <button class="btn" id="btn-link-weight" style="padding:6px 12px; font-size:0.75rem;" onclick="linkWeightFile()">Vincular Archivo</button>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background-color:rgba(0,0,0,0.2); border-radius:8px; border:1px solid var(--border);">
+                        <div>
+                            <div style="font-weight:700; font-size:0.85rem;">registro_fuerza_gimnasio.csv</div>
+                            <div style="font-size:0.7rem; color:var(--text-muted);" id="gym-file-status">No vinculado</div>
+                        </div>
+                        <button class="btn" id="btn-link-gym" style="padding:6px 12px; font-size:0.75rem;" onclick="linkGymFile()">Vincular Archivo</button>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background-color:rgba(0,0,0,0.2); border-radius:8px; border:1px solid var(--border);">
+                        <div>
+                            <div style="font-weight:700; font-size:0.85rem;">registro_pasos_semanal.csv</div>
+                            <div style="font-size:0.7rem; color:var(--text-muted);" id="steps-file-status">No vinculado</div>
+                        </div>
+                        <button class="btn" id="btn-link-steps" style="padding:6px 12px; font-size:0.75rem;" onclick="linkStepsFile()">Vincular Archivo</button>
+                    </div>
+                </div>
+                <div class="notification" style="margin-top:5px;">
+                    <span>💡 <strong>Nota sobre navegadores:</strong> Utiliza Google Chrome o Microsoft Edge en ordenador para habilitar la sincronización directa. En iOS/Android usa los exportadores manuales de abajo.</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">💾 Exportadores Manuales (CSV)</h2>
+                    <span class="card-subtitle">Descarga directa de los datos en formato CSV</span>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+                    <button class="btn btn-secondary" style="font-size:0.75rem; padding:10px 4px;" onclick="exportWeightToCSV()">📥 Peso CSV</button>
+                    <button class="btn btn-secondary" style="font-size:0.75rem; padding:10px 4px;" onclick="exportGymToCSV()">📥 Fuerza CSV</button>
+                    <button class="btn btn-secondary" style="font-size:0.75rem; padding:10px 4px;" onclick="exportStepsToCSV()">📥 Pasos CSV</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">👤 Editar Perfil de Atleta</h2>
+                    <span class="card-subtitle">Actualiza tus datos para las cabeceras y progresos</span>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 120px;">
+                        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Nombre:</label>
+                        <input type="text" id="profile-input-name" style="width:100%; background:#0f172a; border:1px solid var(--border); padding:8px; border-radius:8px; color:#fff; font-size:0.85rem;">
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Edad (ej. 25 años):</label>
+                        <input type="text" id="profile-input-age" style="width:100%; background:#0f172a; border:1px solid var(--border); padding:8px; border-radius:8px; color:#fff; font-size:0.85rem;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 120px;">
+                        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Altura (ej. 1.65 m):</label>
+                        <input type="text" id="profile-input-height" style="width:100%; background:#0f172a; border:1px solid var(--border); padding:8px; border-radius:8px; color:#fff; font-size:0.85rem;">
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Meta de Peso (ej. 75.0):</label>
+                        <input type="text" id="profile-input-target" style="width:100%; background:#0f172a; border:1px solid var(--border); padding:8px; border-radius:8px; color:#fff; font-size:0.85rem;">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveProfileDetails()" style="font-size:0.85rem; padding:8px 16px; cursor: pointer; border: none; border-radius: 8px; color: #fff;">Guardar Perfil</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🔐 Seguridad de Acceso</h2>
+                    <span class="card-subtitle">Administra la contraseña que protege tu panel local y cifrado</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border);">
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.85rem;">Contraseña de Acceso</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">Protege el panel en este navegador</div>
+                    </div>
+                    <button class="btn btn-danger" onclick="changeAccessPassword()" style="padding: 6px 12px; font-size: 0.75rem;">Cambiar Contraseña</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📦 Copia de Seguridad Base de Datos (JSON)</h2>
+                    <span class="card-subtitle">Respalda o restaura todo el historial del navegador</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="json-data-area">Base de Datos Actual:</label>
+                    <textarea id="json-data-area" class="data-textarea" readonly></textarea>
+                </div>
+                <button class="btn btn-secondary" style="font-size:0.8rem;" onclick="copyJsonToClipboard()">📋 Copiar JSON al Portapapeles</button>
+                
+                <div style="border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px; display:flex; flex-direction:column; gap:8px;">
+                    <div class="form-group">
+                        <label class="form-label" for="import-json-input">Importar Copia de Seguridad:</label>
+                        <textarea id="import-json-input" class="data-textarea" placeholder="Pega el código JSON de tu copia de seguridad aquí..."></textarea>
+                    </div>
+                    <button class="btn" style="font-size:0.8rem; background-color: var(--accent-amber); box-shadow: 0 4px 12px var(--accent-amber-glow);" onclick="importJsonData()">⚠️ Importar y Sobrescribir Base de Datos</button>
+                </div>
+
+                <div style="border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px; display:flex; justify-content: space-between; align-items:center;">
+                    <div class="form-group">
+                        <label class="form-label" for="input-target-weight">Peso Objetivo:</label>
+                        <input type="number" id="input-target-weight" value="75.0" step="0.5" style="max-width:80px; padding: 6px; background:rgba(0,0,0,0.2);" onchange="updateTargetWeightConfig()">
+                    </div>
+                    <button class="btn" style="background-color: var(--accent-red); box-shadow: none; font-size:0.75rem; padding: 10px;" onclick="resetDatabase()">⚠️ Reajustar Valores</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <span>Diseño Premium Desarrollado para <span id="profile-footer-name">Atleta</span> (Fuerza y Rendimiento)</span>
+            <span>Localmente guardado en tu navegador mediante LocalStorage e IndexedDB</span>
+        </div>
+
+    </div>
+
+    <script>
+        // --- INDEXEDDB HELPER FOR FILE HANDLES PERSISTENCE ---
+        const idb = {
+            dbName: 'sofia_db_handles',
+            storeName: 'handles',
+            db: null,
+            init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, 1);
+                    request.onupgradeneeded = (e) => {
+                        const db = e.target.result;
+                        db.createObjectStore(this.storeName);
+                    };
+                    request.onsuccess = (e) => {
+                        this.db = e.target.result;
+                        resolve();
+                    };
+                    request.onerror = (e) => reject(e.target.error);
+                });
+            },
+            set(key, val) {
+                return new Promise((resolve, reject) => {
+                    const tx = this.db.transaction(this.storeName, 'readwrite');
+                    const store = tx.objectStore(this.storeName);
+                    const req = store.put(val, key);
+                    req.onsuccess = () => resolve();
+                    req.onerror = () => reject(req.error);
+                });
+            },
+            get(key) {
+                return new Promise((resolve, reject) => {
+                    const tx = this.db.transaction(this.storeName, 'readonly');
+                    const store = tx.objectStore(this.storeName);
+                    const req = store.get(key);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+            },
+            delete(key) {
+                return new Promise((resolve, reject) => {
+                    const tx = this.db.transaction(this.storeName, 'readwrite');
+                    const store = tx.objectStore(this.storeName);
+                    const req = store.delete(key);
+                    req.onsuccess = () => resolve();
+                    req.onerror = () => reject(req.error);
+                });
+            }
+        };
+
+        const EXERCISES_DB = {
+            mes1: {
+                d1: {
+                    title: "Sesión A - Fuerza General (Mes 1)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m1_m1", name: "Gato-Camello (Cat-Camel)", type: "core", sets: 2, reps: "10 reps", weight: "Corp", rest: "30 s", tempo: "Fluido", desc: "Arquea la espalda hacia arriba y hacia abajo a cuatro patas.", tips: "Moviliza la columna de forma suave sin forzar." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m1_a1", name: "Puente de Glúteos (Glute Bridge)", type: "core", sets: 2, reps: "12 reps", weight: "Corp", rest: "45 s", tempo: "2s Isom.", desc: "Boca arriba, levanta la cadera empujando con los talones y apretando los glúteos arriba.", tips: "Mantén 2 segundos arriba. Activa la cadena posterior de forma segura." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 3)",
+                            items: [
+                                { id: "m1_e1", name: "A1. Prensa de piernas inclinada (Leg Press)", type: "fuerza", sets: 3, reps: "RIR3", weight: "55.0 kg", rest: "45 s (ir a A2)", tempo: "3-0-2-0", desc: "Empuja la plataforma de forma controlada, sintiendo la tensión en tus piernas y evitando bloquear rodillas.", tips: "Controla la bajada en 3 segundos y empuja en 2 segundos de forma constante. Mantén los talones firmes." },
+                                { id: "m1_e2", name: "A2. Press de pecho en máquina", type: "fuerza", sets: 3, reps: "RIR3", weight: "12.5 kg", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Empuja de forma constante y controla el retorno para mantener el pectoral bajo tensión.", tips: "Evita los movimientos bruscos. Mantén el empuje firme y constante." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 3)",
+                            items: [
+                                { id: "m1_e3", name: "B1. Remo sentado (polea o máquina)", type: "fuerza", sets: 3, reps: "RIR3", weight: "22.5 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Tira hacia tu abdomen, haz una pausa de 1s apretando la espalda y regresa controlado.", tips: "Mantén los hombros abajo y junta las escápulas al final del recorrido." },
+                                { id: "m1_e4", name: "B2. Curl de isquiotibiales en máquina", type: "fuerza", sets: 3, reps: "RIR3", weight: "17.5 kg", rest: "90 s (ir a B1)", tempo: "3-0-2-0", desc: "Flexiona de forma controlada y frena el retorno de la máquina lentamente.", tips: "Mantén la cadera apoyada, concéntrate en la fuerza de tus isquiotibiales." }
+                            ]
+                        },
+                        {
+                            name: "5. Estabilidad del Core (Finisher)",
+                            items: [
+                                { id: "m1_e5", name: "Plancha abdominal en colchoneta", type: "core", sets: 3, reps: "20-30 s", weight: "Corporal", rest: "60 s", tempo: "Estático", desc: "Apoya antebrazos y puntas de pie manteniendo el cuerpo recto como una tabla.", tips: "Aprieta fuerte glúteos y abdomen. No dejes caer la cadera." }
+                            ]
+                        }
+                    ]
+                },
+                d2: {
+                    title: "Sesión B - Fuerza General (Mes 1)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m1_m1", name: "Gato-Camello (Cat-Camel)", type: "core", sets: 2, reps: "10 reps", weight: "Corp", rest: "30 s", tempo: "Fluido", desc: "Arquea la espalda hacia arriba y hacia abajo a cuatro patas.", tips: "Moviliza la columna de forma suave sin forzar." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m1_a1", name: "Puente de Glúteos (Glute Bridge)", type: "core", sets: 2, reps: "12 reps", weight: "Corp", rest: "45 s", tempo: "2s Isom.", desc: "Boca arriba, levanta la cadera empujando con los talones y apretando los glúteos arriba.", tips: "Mantén 2 segundos arriba. Activa la cadena posterior de forma segura." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 3)",
+                            items: [
+                                { id: "m1_e1", name: "A1. Prensa de piernas inclinada (Leg Press)", type: "fuerza", sets: 3, reps: "RIR3", weight: "55.0 kg", rest: "45 s (ir a A2)", tempo: "3-0-2-0", desc: "Empuja la plataforma de forma controlada, sintiendo la tensión en tus piernas y evitando bloquear rodillas.", tips: "Controla la bajada en 3 segundos y empuja en 2 segundos de forma constante. Mantén los talones firmes." },
+                                { id: "m1_e2", name: "A2. Press de pecho en máquina", type: "fuerza", sets: 3, reps: "RIR3", weight: "12.5 kg", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Empuja de forma constante y controla el retorno para mantener el pectoral bajo tensión.", tips: "Evita los movimientos bruscos. Mantén el empuje firme y constante." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 3)",
+                            items: [
+                                { id: "m1_e3", name: "B1. Remo sentado (polea o máquina)", type: "fuerza", sets: 3, reps: "RIR3", weight: "22.5 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Tira hacia tu abdomen, haz una pausa de 1s apretando la espalda y regresa controlado.", tips: "Mantén los hombros abajo y junta las escápulas al final del recorrido." },
+                                { id: "m1_e4", name: "B2. Curl de isquiotibiales en máquina", type: "fuerza", sets: 3, reps: "RIR3", weight: "17.5 kg", rest: "90 s (ir a B1)", tempo: "3-0-2-0", desc: "Flexiona de forma controlada y frena el retorno de la máquina lentamente.", tips: "Mantén la cadera apoyada, concéntrate en la fuerza de tus isquiotibiales." }
+                            ]
+                        },
+                        {
+                            name: "5. Estabilidad del Core (Finisher)",
+                            items: [
+                                { id: "m1_e5", name: "Plancha abdominal en colchoneta", type: "core", sets: 3, reps: "20-30 s", weight: "Corporal", rest: "60 s", tempo: "Estático", desc: "Apoya antebrazos y puntas de pie manteniendo el cuerpo recto como una tabla.", tips: "Aprieta fuerte glúteos y abdomen. No dejes caer la cadera." }
+                            ]
+                        }
+                    ]
+                }
+            },
+            mes2: {
+                d1: {
+                    title: "Sesión A - Fuerza General (Mes 2)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m2_m1", name: "Gato-Camello (Cat-Camel)", type: "core", sets: 2, reps: "10 reps", weight: "Corp", rest: "30 s", tempo: "Fluido", desc: "Arquea la espalda a cuatro patas.", tips: "Moviliza la columna de forma controlada." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m2_a1", name: "Puente de Glúteos (Glute Bridge)", type: "core", sets: 2, reps: "15 reps", weight: "Corp", rest: "45 s", tempo: "2s Isom.", desc: "Boca arriba, levanta la cadera empujando con talones.", tips: "Aprieta fuerte los glúteos al final del rango." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 1)",
+                            items: [
+                                { id: "m2_e1", name: "A1. Prensa de piernas (Leg Press)", type: "fuerza", sets: 3, reps: "RIR1", weight: "62.5 kg", rest: "45 s (ir a A2)", tempo: "3-0-2-0", desc: "Empuja la plataforma controlando la bajada en 3s. Enfócate en la fuerza sostenida.", tips: "Fuerza pura: empuja con toda la planta del pie de forma uniforme sin tirones." },
+                                { id: "m2_e2", name: "A2. Press de pecho en máquina", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.5 kg", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Prensa de pecho controlada para estimular la fuerza del pectoral y tríceps.", tips: "Mantén los codos en diagonal de 45° y empuja de forma constante." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 1)",
+                            items: [
+                                { id: "m2_e3", name: "B1. Remo a una mano", type: "fuerza", sets: 3, reps: "RIR1", weight: "22.5 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Tracción unilateral controlada para mejorar la fuerza y estabilidad de la espalda.", tips: "Sostén 1 segundo la contracción pegando el codo al cuerpo antes de bajar lentamente." },
+                                { id: "m2_e4", name: "B2. Curl de isquiotibiales en máquina", type: "fuerza", sets: 3, reps: "RIR1", weight: "22.5 kg", rest: "90 s (ir a B1)", tempo: "3-0-2-0", desc: "Trabajo de fuerza aislada para la parte posterior del muslo.", tips: "Control estricto en la fase de subida y bajada. Sin impulsos." }
+                            ]
+                        },
+                        {
+                            name: "5. Estabilidad del Core (Finisher)",
+                            items: [
+                                { id: "m2_e5", name: "Plancha abdominal en colchoneta", type: "core", sets: 3, reps: "30-40 s", weight: "Corporal", rest: "60 s", tempo: "Estático", desc: "Sostén la plancha abdominal aumentando el tiempo de resistencia.", tips: "Mantén la cabeza alineada con la columna." }
+                            ]
+                        }
+                    ]
+                },
+                d2: {
+                    title: "Sesión B - Fuerza General (Mes 2)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m2_m1", name: "Gato-Camello (Cat-Camel)", type: "core", sets: 2, reps: "10 reps", weight: "Corp", rest: "30 s", tempo: "Fluido", desc: "Arquea la espalda a cuatro patas.", tips: "Moviliza la columna de forma controlada." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m2_a1", name: "Puente de Glúteos (Glute Bridge)", type: "core", sets: 2, reps: "15 reps", weight: "Corp", rest: "45 s", tempo: "2s Isom.", desc: "Boca arriba, levanta la cadera empujando con talones.", tips: "Aprieta fuerte los glúteos al final del rango." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 1)",
+                            items: [
+                                { id: "m2_e1", name: "A1. Prensa de piernas (Leg Press)", type: "fuerza", sets: 3, reps: "RIR1", weight: "62.5 kg", rest: "45 s (ir a A2)", tempo: "3-0-2-0", desc: "Empuja la plataforma controlando la bajada en 3s. Enfócate en la fuerza sostenida.", tips: "Fuerza pura: empuja con toda la planta del pie de forma uniforme sin tirones." },
+                                { id: "m2_e2", name: "A2. Press de pecho en máquina", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.5 kg", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Prensa de pecho controlada para estimular la fuerza del pectoral y tríceps.", tips: "Mantén los codos en diagonal de 45° y empuja de forma constante." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 1)",
+                            items: [
+                                { id: "m2_e3", name: "B1. Remo a una mano", type: "fuerza", sets: 3, reps: "RIR1", weight: "22.5 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Tracción unilateral controlada para mejorar la fuerza y estabilidad de la espalda.", tips: "Sostén 1 segundo la contracción pegando el codo al cuerpo antes de bajar lentamente." },
+                                { id: "m2_e4", name: "B2. Curl de isquiotibiales en máquina", type: "fuerza", sets: 3, reps: "RIR1", weight: "22.5 kg", rest: "60 s", tempo: "3-0-2-0", desc: "Trabajo de fuerza aislada para la parte posterior del muslo.", tips: "Control estricto en la fase de subida y bajada. Sin impulsos." }
+                            ]
+                        },
+                        {
+                            name: "5. Estabilidad del Core (Finisher)",
+                            items: [
+                                { id: "m2_e5", name: "Plancha abdominal en colchoneta", type: "core", sets: 3, reps: "30-40 s", weight: "Corporal", rest: "60 s", tempo: "Estático", desc: "Sostén la plancha abdominal aumentando el tiempo de resistencia.", tips: "Mantén la cabeza alineada con la columna." }
+                            ]
+                        }
+                    ]
+                }
+            },
+            mes3: {
+                d1: {
+                    title: "Sesión A - Fuerza Mancuernas (Mes 3)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m3_m1", name: "Movilidad 90/90 de Cadera", type: "core", sets: 2, reps: "10 reps/lado", weight: "Corp", rest: "30 s", tempo: "Control", desc: "Sentada en el suelo con rodillas dobladas a 90 grados, rotar caderas a ambos lados.", tips: "Mejora la movilidad de la articulación de la cadera." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m3_a1", name: "Puente de Glúteo a una Pierna", type: "core", sets: 2, reps: "10 reps/lado", weight: "Corp", rest: "45 s", tempo: "Control", desc: "Boca arriba, levanta la cadera empujando con un solo talón mientras la otra pierna está al aire.", tips: "Activación unilateral intensa de glúteo mayor." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 1)",
+                            items: [
+                                { id: "m3_e1", name: "A1. Prensa de piernas (Leg Press)", type: "fuerza", sets: 3, reps: "RIR1", weight: "70.0 kg", rest: "45 s (ir a A2)", tempo: "3-0-2-0", desc: "Prensa pesada controlando la fase excéntrica en 3 segundos.", tips: "Empuje firme y uniforme, sintiendo el trabajo en los cuádriceps y glúteos." },
+                                { id: "m3_e2", name: "A2. Press de pecho con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "6.0 kg/mano", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Prensa con mancuernas controlando la bajada en 3s y subiendo en 2s de forma estable.", tips: "Mantén la estabilidad de los brazos. Movimiento uniforme y sin rebotes." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 1)",
+                            items: [
+                                { id: "m3_e3", name: "B1. Remo a una mano con mancuerna (banco)", type: "fuerza", sets: 3, reps: "RIR1", weight: "10.0 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Tracción unilateral con mancuerna en banco con parada isométrica de 1s arriba.", tips: "Lleva el codo hacia la cadera y aprieta el dorsal durante 1 segundo arriba." },
+                                { id: "m3_e4", name: "B2. Peso Muerto Rumano con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.0 kg/mano", rest: "90 s (ir a B1)", tempo: "3-1-2-0", desc: "Bisagra de cadera controlada bajando en 3s, con parada de 1s abajo para sentir estiramiento.", tips: "Mantén la espalda neutra y sube haciendo fuerza con los glúteos de forma controlada." }
+                            ]
+                        },
+                        {
+                            name: "5. Core Dinámico / Paseos (Finisher)",
+                            items: [
+                                { id: "m3_e5", name: "Paseo de Maleta (Suitcase Carry)", type: "core", sets: 3, reps: "30 pasos", weight: "12.0 kg", rest: "60 s", tempo: "Paseo", desc: "Sujeta una mancuerna con una sola mano y camina erguida sin inclinarte.", tips: "Fuerza la faja abdominal para contrarrestar el peso lateral." }
+                            ]
+                        }
+                    ]
+                },
+                d2: {
+                    title: "Sesión B - Fuerza Mancuernas (Mes 3)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m3_m1", name: "Movilidad 90/90 de Cadera", type: "core", sets: 2, reps: "10 reps/lado", weight: "Corp", rest: "30 s", tempo: "Control", desc: "Rotación de cadera en suelo a 90 grados.", tips: "Mejora la flexibilidad de la cadera." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m3_a1", name: "Puente de Glúteo a una Pierna", type: "core", sets: 2, reps: "10 reps/lado", weight: "Corp", rest: "45 s", tempo: "Control", desc: "Puente a una sola pierna para aislar glúteos.", tips: "Empuja con fuerza desde el talón." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 1)",
+                            items: [
+                                { id: "m3_e1", name: "A1. Prensa de piernas (Leg Press)", type: "fuerza", sets: 3, reps: "RIR1", weight: "70.0 kg", rest: "45 s (ir a A2)", tempo: "3-0-2-0", desc: "Prensa pesada controlando la fase excéntrica en 3 segundos.", tips: "Empuje firme y uniforme, sintiendo el trabajo en los cuádriceps y glúteos." },
+                                { id: "m3_e2", name: "A2. Press de pecho con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "6.0 kg/mano", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Prensa con mancuernas controlando la bajada en 3s y subiendo en 2s de forma estable.", tips: "Mantén la estabilidad de los brazos. Movimiento uniforme y sin rebotes." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 1)",
+                            items: [
+                                { id: "m3_e3", name: "B1. Remo a una mano con mancuerna (banco)", type: "fuerza", sets: 3, reps: "RIR1", weight: "10.0 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Tracción unilateral con mancuerna en banco con parada isométrica de 1s arriba.", tips: "Lleva el codo hacia la cadera y aprieta el dorsal durante 1 segundo arriba." },
+                                { id: "m3_e4", name: "B2. Peso Muerto Rumano con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.0 kg/mano", rest: "90 s (ir a B1)", tempo: "3-1-2-0", desc: "Bisagra de cadera controlada bajando en 3s, con parada de 1s abajo para sentir estiramiento.", tips: "Mantén la espalda neutra y sube haciendo fuerza con los glúteos de forma controlada." }
+                            ]
+                        },
+                        {
+                            name: "5. Core Dinámico / Paseos (Finisher)",
+                            items: [
+                                { id: "m3_e5", name: "Paseo de Maleta (Suitcase Carry)", type: "core", sets: 3, reps: "30 pasos", weight: "12.0 kg", rest: "60 s", tempo: "Paseo", desc: "Sujeta una mancuerna con una sola mano y camina erguida sin inclinarte.", tips: "Fuerza la faja abdominal para contrarrestar el peso lateral." }
+                            ]
+                        }
+                    ]
+                }
+            },
+            mes4: {
+                d1: {
+                    title: "Sesión A - Fuerza Libre & Sentadilla (Mes 4)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m4_m1", name: "Movilidad 90/90 de Cadera", type: "core", sets: 2, reps: "10 reps/lado", weight: "Corp", rest: "30 s", tempo: "Control", desc: "Rotación profunda de cadera en suelo." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m4_a1", name: "Puente de Glúteo a una Pierna", type: "core", sets: 2, reps: "12 reps/lado", weight: "Corp", rest: "45 s", tempo: "Control", desc: "Elevaciones de cadera unilaterales." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 1)",
+                            items: [
+                                { id: "m4_e1", name: "A1. Sentadilla Goblet con mancuerna", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.0 kg", rest: "45 s (ir a A2)", tempo: "3-1-2-0", desc: "Sentadilla Goblet con parada de 1s abajo para eliminar el rebote y ganar fuerza estática.", tips: "Torso erguido, baja controlado en 3s, haz pausa de 1s y sube en 2s de forma constante." },
+                                { id: "m4_e2", name: "A2. Press de pecho con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "8.0 kg/mano", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Trabajo de fuerza en press plano con mancuernas de 8kg de forma muy controlada.", tips: "Controla la bajada en 3 segundos y empuja de forma uniforme y estable en 2 segundos." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 1)",
+                            items: [
+                                { id: "m4_e3", name: "B1. Remo a una mano con mancuerna (banco)", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.0 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Remo pesado a una mano controlando el recorrido y con parada de 1s al final.", tips: "Tracción limpia hacia la cadera, hombro lejos de la oreja." },
+                                { id: "m4_e4", name: "B2. Peso Muerto Rumano con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "14.0 kg/mano", rest: "90 s (ir a B1)", tempo: "3-1-2-0", desc: "Bisagra de cadera pesada bajando en 3s y controlando la subida en 2s.", tips: "Mantén los hombros firmes y la barra/mancuernas pegadas a tus piernas en todo momento." }
+                            ]
+                        },
+                        {
+                            name: "5. Core Dinámico / Paseos (Finisher)",
+                            items: [
+                                { id: "m4_e5", name: "Paseo de Maleta (Suitcase Carry)", type: "core", sets: 3, reps: "30 pasos", weight: "14.0 kg", rest: "60 s", tempo: "Paseo", desc: "Camina manteniendo la rigidez del abdomen con mancuerna de 14kg.", tips: "Da pasos cortos y controlados." }
+                            ]
+                        }
+                    ]
+                },
+                d2: {
+                    title: "Sesión B - Fuerza Libre & Sentadilla (Mes 4)",
+                    blocks: [
+                        {
+                            name: "1. Movilidad (Calentamiento)",
+                            items: [
+                                { id: "m4_m1", name: "Movilidad 90/90 de Cadera", type: "core", sets: 2, reps: "10 reps/lado", weight: "Corp", rest: "30 s", tempo: "Control", desc: "Rotación profunda de cadera en suelo." }
+                            ]
+                        },
+                        {
+                            name: "2. Activación Glúteos y Core",
+                            items: [
+                                { id: "m4_a1", name: "Puente de Glúteo a una Pierna", type: "core", sets: 2, reps: "12 reps/lado", weight: "Corp", rest: "45 s", tempo: "Control", desc: "Elevaciones de cadera unilaterales." }
+                            ]
+                        },
+                        {
+                            name: "3. Fuerza - Superserie A (3 Series x RIR 1)",
+                            items: [
+                                { id: "m4_e1", name: "A1. Sentadilla Goblet con mancuerna", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.0 kg", rest: "45 s (ir a A2)", tempo: "3-1-2-0", desc: "Sentadilla Goblet con parada de 1s abajo para eliminar el rebote y ganar fuerza estática.", tips: "Torso erguido, baja controlado en 3s, haz pausa de 1s y sube en 2s de forma constante." },
+                                { id: "m4_e2", name: "A2. Press de pecho con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "8.0 kg/mano", rest: "90 s (ir a A1)", tempo: "3-0-2-0", desc: "Trabajo de fuerza en press plano con mancuernas de 8kg de forma muy controlada.", tips: "Controla la bajada en 3 segundos y empuja de forma uniforme y estable en 2 segundos." }
+                            ]
+                        },
+                        {
+                            name: "4. Fuerza - Superserie B (3 Series x RIR 1)",
+                            items: [
+                                { id: "m4_e3", name: "B1. Remo a una mano con mancuerna (banco)", type: "fuerza", sets: 3, reps: "RIR1", weight: "12.0 kg", rest: "45 s (ir a B2)", tempo: "2-1-2-0", desc: "Remo pesado a una mano controlando el recorrido y con parada de 1s al final.", tips: "Tracción limpia hacia la cadera, hombro lejos de la oreja." },
+                                { id: "m4_e4", name: "B2. Peso Muerto Rumano con mancuernas", type: "fuerza", sets: 3, reps: "RIR1", weight: "14.0 kg/mano", rest: "90 s (ir a B1)", tempo: "3-1-2-0", desc: "Bisagra de cadera pesada bajando en 3s y controlando la subida en 2s.", tips: "Mantén los hombros firmes y la barra/mancuernas pegadas a tus piernas en todo momento." }
+                            ]
+                        },
+                        {
+                            name: "5. Core Dinámico / Paseos (Finisher)",
+                            items: [
+                                { id: "m4_e5", name: "Paseo de Maleta (Suitcase Carry)", type: "core", sets: 3, reps: "30 pasos", weight: "14.0 kg", rest: "60 s", tempo: "Paseo", desc: "Camina manteniendo la rigidez del abdomen con mancuerna de 14kg.", tips: "Da pasos cortos y controlados." }
+                            ]
+                        }
+                    ]
+                }
+            }
+        };
+
+        const DEFAULT_STATE = {
+            weeklyCalendars: {},
+            weightLogs: [],
+            gymLogs: {},
+            stepsLogs: {},
+            activeRoutineDay: 1,
+            gymDay1: "Martes",
+            gymDay2: "Jueves",
+            targetWeight: 75.0,
+            dailyStepsGoal: 8000,
+            githubSync: { token: '', username: '', repo: '', lastSync: '' },
+            passwordHash: '',
+            profile: { name: '', age: '', height: '', target: '', initialWeight: '' }
+        };
+
+        let appState = {};
+        let weightFileHandle = null;
+        let gymFileHandle = null;
+        let stepsFileHandle = null;
+        let onloadCompleted = false;
+        let isSyncing = false;
+
+        // --- GLOBAL DATE UTILITIES ---
+        function toLocalISOString(dateObj) {
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getMondayOfCurrentWeek() {
+            const today = new Date();
+            const day = today.getDay();
+            const mon = new Date(today);
+            if (day === 0) {
+                mon.setDate(today.getDate() - 6);
+            } else {
+                mon.setDate(today.getDate() - (day - 1));
+            }
+            return toLocalISOString(mon);
+        }
+
+        function getWeekNumber(weekStartStr) {
+            const start = new Date("2026-06-08T00:00:00");
+            const current = new Date(weekStartStr + "T00:00:00");
+            const diffTime = current - start;
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            return Math.floor(diffDays / 7) + 1;
+        }
+
+        function getMondayOfDate(dateStr) {
+            const d = new Date(dateStr + "T00:00:00");
+            const day = d.getDay();
+            const mon = new Date(d);
+            if (day === 0) {
+                mon.setDate(d.getDate() - 6);
+            } else {
+                mon.setDate(d.getDate() - (day - 1));
+            }
+            return toLocalISOString(mon);
+        }
+
+        function getActiveBlockForSelectedWeek() {
+            const weekNum = getWeekNumber(appState.selectedWeekStart);
+            if (weekNum >= 1 && weekNum <= 4) return "mes1";
+            if (weekNum >= 5 && weekNum <= 8) return "mes2";
+            if (weekNum >= 9 && weekNum <= 12) return "mes3";
+            if (weekNum >= 13 && weekNum <= 16) return "mes4";
+            return null;
+        }
+
+        function getBlockForDate(dateStr) {
+            const weekStart = getMondayOfDate(dateStr);
+            const weekNum = getWeekNumber(weekStart);
+            if (weekNum >= 1 && weekNum <= 4) return "mes1";
+            if (weekNum >= 5 && weekNum <= 8) return "mes2";
+            if (weekNum >= 9 && weekNum <= 12) return "mes3";
+            if (weekNum >= 13 && weekNum <= 16) return "mes4";
+            return "";
+        }
+
+        function getWeeklyCalendarTemplate() {
+            const gDay1 = appState.gymDay1 || "Martes";
+            const gDay2 = appState.gymDay2 || "Jueves";
+            
+            const calendar = {
+                gymDay1: gDay1,
+                gymDay2: gDay2,
+                days: {}
+            };
+
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            daysOfWeek.forEach(dName => {
+                if (dName === gDay1) {
+                    calendar.days[dName] = { type: 'gym', desc: 'Fuerza: Día 1', notes: 'Gimnasio - Rutina Completa' };
+                } else if (dName === gDay2) {
+                    calendar.days[dName] = { type: 'gym', desc: 'Fuerza: Día 2', notes: 'Gimnasio - Rutina Completa' };
+                } else {
+                    calendar.days[dName] = { type: 'rest', desc: 'Descanso / Actividad Suave', notes: 'Cumplir objetivo de pasos' };
+                }
+            });
+            return calendar;
+        }
+
+        function getOrCreateWeeklyCalendar(weekStart) {
+            if (!appState.weeklyCalendars) {
+                appState.weeklyCalendars = {};
+            }
+            if (!appState.weeklyCalendars[weekStart]) {
+                appState.weeklyCalendars[weekStart] = getWeeklyCalendarTemplate();
+            }
+            return appState.weeklyCalendars[weekStart];
+        }
+
+        // --- FILE SYSTEM ACCESS API ROUTINES ---
+        async function initFileAccess() {
+            try {
+                await idb.init();
+                weightFileHandle = await idb.get('weight_handle');
+                gymFileHandle = await idb.get('gym_handle');
+                stepsFileHandle = await idb.get('steps_handle');
+
+                if (weightFileHandle) {
+                    document.getElementById('weight-file-status').innerText = 'Vinculado';
+                    document.getElementById('weight-file-status').style.color = 'var(--accent-green)';
+                    document.getElementById('btn-link-weight').innerText = '🔗 Desvincular Peso';
+                }
+                if (gymFileHandle) {
+                    document.getElementById('gym-file-status').innerText = 'Vinculado';
+                    document.getElementById('gym-file-status').style.color = 'var(--accent-green)';
+                    document.getElementById('btn-link-gym').innerText = '🔗 Desvincular Fuerza';
+                }
+                if (stepsFileHandle) {
+                    document.getElementById('steps-file-status').innerText = 'Vinculado';
+                    document.getElementById('steps-file-status').style.color = 'var(--accent-green)';
+                    document.getElementById('btn-link-steps').innerText = '🔗 Desvincular Pasos';
+                }
+            } catch (e) {
+                console.warn("IndexedDB o File System API no soportado plenamente.", e);
+            }
+        }
+
+        async function verifyPermission(fileHandle, readWrite) {
+            const options = {};
+            if (readWrite) {
+                options.mode = 'readwrite';
+            }
+            if ((await fileHandle.queryPermission(options)) === 'granted') {
+                return true;
+            }
+            if ((await fileHandle.requestPermission(options)) === 'granted') {
+                return true;
+            }
+            return false;
+        }
+
+        async function writeContents(fileHandle, contents) {
+            try {
+                const hasPermission = await verifyPermission(fileHandle, true);
+                if (!hasPermission) {
+                    alert("Permiso de escritura en disco denegado por el usuario.");
+                    return false;
+                }
+                const writable = await fileHandle.createWritable();
+                await writable.write(contents);
+                await writable.close();
+                return true;
+            } catch (e) {
+                console.error("Error writing to local file", e);
+                alert("Error al escribir el archivo local. Asegúrate de que no esté abierto en Excel.");
+                return false;
+            }
+        }
+
+        async function linkWeightFile() {
+            if (weightFileHandle) {
+                weightFileHandle = null;
+                await idb.delete('weight_handle');
+                document.getElementById('weight-file-status').innerText = 'No vinculado';
+                document.getElementById('weight-file-status').style.color = 'var(--accent-red)';
+                document.getElementById('btn-link-weight').innerText = 'Vincular Archivo';
+                return;
+            }
+
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    multiple: false,
+                    types: [{
+                        description: 'CSV de Peso (registro_peso_semanal.csv)',
+                        accept: { 'text/csv': ['.csv'] }
+                    }]
+                });
+                weightFileHandle = handle;
+                await idb.set('weight_handle', handle);
+                document.getElementById('weight-file-status').innerText = 'Vinculado';
+                document.getElementById('weight-file-status').style.color = 'var(--accent-green)';
+                document.getElementById('btn-link-weight').innerText = '🔗 Desvincular Peso';
+                
+                await syncWeightFile();
+            } catch (e) {
+                console.log("File picker cancelado.", e);
+            }
+        }
+
+        async function linkGymFile() {
+            if (gymFileHandle) {
+                gymFileHandle = null;
+                await idb.delete('gym_handle');
+                document.getElementById('gym-file-status').innerText = 'No vinculado';
+                document.getElementById('gym-file-status').style.color = 'var(--accent-red)';
+                document.getElementById('btn-link-gym').innerText = 'Vincular Archivo';
+                return;
+            }
+
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    multiple: false,
+                    types: [{
+                        description: 'CSV de Gimnasio (registro_fuerza_gimnasio.csv)',
+                        accept: { 'text/csv': ['.csv'] }
+                    }]
+                });
+                gymFileHandle = handle;
+                await idb.set('gym_handle', handle);
+                document.getElementById('gym-file-status').innerText = 'Vinculado';
+                document.getElementById('gym-file-status').style.color = 'var(--accent-green)';
+                document.getElementById('btn-link-gym').innerText = '🔗 Desvincular Fuerza';
+
+                await syncGymFile();
+            } catch (e) {
+                console.log("File picker cancelado.", e);
+            }
+        }
+
+        async function linkStepsFile() {
+            if (stepsFileHandle) {
+                stepsFileHandle = null;
+                await idb.delete('steps_handle');
+                document.getElementById('steps-file-status').innerText = 'No vinculado';
+                document.getElementById('steps-file-status').style.color = 'var(--accent-red)';
+                document.getElementById('btn-link-steps').innerText = 'Vincular Archivo';
+                return;
+            }
+
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    multiple: false,
+                    types: [{
+                        description: 'CSV de Pasos (registro_pasos_semanal.csv)',
+                        accept: { 'text/csv': ['.csv'] }
+                    }]
+                });
+                stepsFileHandle = handle;
+                await idb.set('steps_handle', handle);
+                document.getElementById('steps-file-status').innerText = 'Vinculado';
+                document.getElementById('steps-file-status').style.color = 'var(--accent-green)';
+                document.getElementById('btn-link-steps').innerText = '🔗 Desvincular Pasos';
+
+                await syncStepsFile();
+            } catch (e) {
+                console.log("File picker cancelado.", e);
+            }
+        }
+
+        function generateWeightCSV() {
+            let csv = "Fecha,Peso (kg),Variacion (kg),Notas\r\n";
+            appState.weightLogs.forEach((log, idx) => {
+                let variation = "-";
+                if (idx > 0) {
+                    variation = (log.weight - appState.weightLogs[idx-1].weight).toFixed(1);
+                    if (parseFloat(variation) > 0) variation = "+" + variation;
+                }
+                const [year, month, day] = log.date.split('-');
+                csv += `${day}/${month}/${year},${log.weight.toFixed(1)},${variation},"${log.notes || ''}"\r\n`;
+            });
+            return csv;
+        }
+
+        async function syncWeightFile() {
+            if (weightFileHandle) {
+                const csv = generateWeightCSV();
+                await writeContents(weightFileHandle, csv);
+            }
+        }
+
+        function generateGymCSV() {
+            let csv = "Fecha,Dia,Bloque,Ejercicio,Serie,Carga Plan,Repeticiones,Carga Usada (kg),RIR,Notas\r\n";
+            
+            const exerciseMap = {};
+            const blockNames = {
+                mes1: "Mes 1 (Sem 1-4)",
+                mes2: "Mes 2 (Sem 5-8)",
+                mes3: "Mes 3 (Sem 9-12)",
+                mes4: "Mes 4 (Sem 13-16)"
+            };
+
+            for (let bKey in EXERCISES_DB) {
+                for (let dKey in EXERCISES_DB[bKey]) {
+                    EXERCISES_DB[bKey][dKey].blocks.forEach(blk => {
+                        blk.items.forEach(exe => {
+                            exerciseMap[exe.id] = {
+                                name: exe.name,
+                                planWeight: exe.weight
+                            };
+                        });
+                    });
+                }
+            }
+
+            const sortedDates = Object.keys(appState.gymLogs).sort((a, b) => new Date(a) - new Date(b));
+
+            sortedDates.forEach(dateStr => {
+                const [year, month, day] = dateStr.split('-');
+                const dFormatted = `${day}/${month}/${year}`;
+                const dObj = new Date(dateStr + "T00:00:00");
+                const dayOfWeekStr = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
+                const dayCapitalized = dayOfWeekStr.charAt(0).toUpperCase() + dayOfWeekStr.slice(1);
+
+                for (let exeId in appState.gymLogs[dateStr]) {
+                    const logs = appState.gymLogs[dateStr][exeId];
+                    const exeInfo = exerciseMap[exeId] || { name: exeId, planWeight: "" };
+
+                    logs.forEach((setLog, sIdx) => {
+                        if (setLog && setLog.completed) {
+                            const entryBlock = getBlockForDate(dateStr);
+                            const repsVal = setLog.reps || 0;
+                            const weightVal = setLog.weight || 0;
+                            const rirVal = setLog.rir || '';
+                            const notesVal = setLog.notes || '';
+                            csv += `${dFormatted},${dayCapitalized},${blockNames[entryBlock] || ''},"${exeInfo.name}",Serie ${sIdx+1},"${exeInfo.planWeight}",${repsVal},${weightVal},"${rirVal}","${notesVal}"\r\n`;
+                        }
+                    });
+                }
+            });
+            return csv;
+        }
+
+        async function syncGymFile() {
+            if (gymFileHandle) {
+                const csv = generateGymCSV();
+                await writeContents(gymFileHandle, csv);
+            }
+        }
+
+        function generateStepsCSV() {
+            let csv = "Fecha,Dia,Pasos,Notas\r\n";
+            const sortedDates = Object.keys(appState.stepsLogs || {}).sort((a, b) => new Date(a) - new Date(b));
+            sortedDates.forEach(dateStr => {
+                const [year, month, day] = dateStr.split('-');
+                const dFormatted = `${day}/${month}/${year}`;
+                const dObj = new Date(dateStr + "T00:00:00");
+                const dayOfWeekStr = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
+                const dayCapitalized = dayOfWeekStr.charAt(0).toUpperCase() + dayOfWeekStr.slice(1);
+                
+                const data = appState.stepsLogs[dateStr];
+                if (data && data.steps !== undefined) {
+                    csv += `${dFormatted},${dayCapitalized},${data.steps},"${data.notes || ''}"\r\n`;
+                }
+            });
+            return csv;
+        }
+
+        async function syncStepsFile() {
+            if (stepsFileHandle) {
+                const csv = generateStepsCSV();
+                await writeContents(stepsFileHandle, csv);
+            }
+        }
+
+        // --- STATE ACTIONS ---
+        function closeGiftModal() {
+            localStorage.setItem('sofia_gift_alert_shown', 'true');
+            document.getElementById('gift-modal').style.display = 'none';
+        }
+
+        function loadState() {
+            const stored = localStorage.getItem('sofia_phys_prep_db');
+            if (stored) {
+                try {
+                    appState = JSON.parse(stored);
+                    if (!appState.weightLogs) appState.weightLogs = [];
+                    if (!appState.gymLogs) appState.gymLogs = {};
+                    if (!appState.stepsLogs) appState.stepsLogs = {};
+                    
+                    if (!appState.gymDay1) appState.gymDay1 = DEFAULT_STATE.gymDay1;
+                    if (!appState.gymDay2) appState.gymDay2 = DEFAULT_STATE.gymDay2;
+                    if (!appState.targetWeight) appState.targetWeight = DEFAULT_STATE.targetWeight;
+                    if (!appState.dailyStepsGoal) appState.dailyStepsGoal = DEFAULT_STATE.dailyStepsGoal;
+                    if (!appState.activeRoutineDay) appState.activeRoutineDay = DEFAULT_STATE.activeRoutineDay;
+                    if (!appState.githubSync) appState.githubSync = { ...DEFAULT_STATE.githubSync };
+                    if (!appState.profile) appState.profile = { ...DEFAULT_STATE.profile };
+                } catch (e) {
+                    console.error("Error al analizar la DB guardada", e);
+                    appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                }
+            } else {
+                appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                saveState(true);
+            }
+
+            appState.selectedWeekStart = getMondayOfCurrentWeek();
+        }
+
+        function saveState(skipUIUpdate = false) {
+            const toSave = JSON.parse(JSON.stringify(appState));
+            delete toSave.selectedWeekStart;
+
+            localStorage.setItem('sofia_phys_prep_db', JSON.stringify(toSave));
+            
+            if (!skipUIUpdate) {
+                updateUI();
+            }
+
+            // Auto sync to GitHub if configured and not currently syncing
+            if (appState.githubSync && appState.githubSync.token && !isSyncing) {
+                updateSyncBadge('pending', 'Pendiente de Sinc.');
+                if (window.syncTimeout) clearTimeout(window.syncTimeout);
+                window.syncTimeout = setTimeout(() => {
+                    syncWithGitHubSilent();
+                }, 2000);
+            }
+        }
+
+        // --- WEEK NAVIGATION ---
+        function changeWeek(offsetWeeks) {
+            const currentMon = new Date(appState.selectedWeekStart + "T00:00:00");
+            currentMon.setDate(currentMon.getDate() + (offsetWeeks * 7));
+            appState.selectedWeekStart = toLocalISOString(currentMon);
+            updateUI();
+        }
+
+        function goToCurrentWeek() {
+            appState.selectedWeekStart = getMondayOfCurrentWeek();
+            updateUI();
+        }
+
+        function getGymDaysOfSelectedWeek() {
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const mon = new Date(appState.selectedWeekStart + "T00:00:00");
+            const calendar = getOrCreateWeeklyCalendar(appState.selectedWeekStart);
+            
+            const gymDays = [];
+            daysOfWeek.forEach((dName, idx) => {
+                const dayData = calendar.days[dName];
+                if (dayData && dayData.type === 'gym') {
+                    const d = new Date(mon);
+                    d.setDate(mon.getDate() + idx);
+                    gymDays.push({
+                        dayName: dName,
+                        dateStr: toLocalISOString(d),
+                        label: `${dName} (${d.getDate()}/${String(d.getMonth()+1).padStart(2,'0')})`
+                    });
+                }
+            });
+            return gymDays;
+        }
+
+        function updateGymDaysConfig() {
+            const day1 = document.getElementById('select-gymday1').value;
+            const day2 = document.getElementById('select-gymday2').value;
+            
+            if (day1 === day2) {
+                alert("Por favor selecciona dos días diferentes de entrenamiento.");
+                // Reset select inputs to state values
+                document.getElementById('select-gymday1').value = appState.gymDay1;
+                document.getElementById('select-gymday2').value = appState.gymDay2;
+                return;
+            }
+
+            appState.gymDay1 = day1;
+            appState.gymDay2 = day2;
+
+            // Regenerate current week's calendar setup
+            const calendar = getOrCreateWeeklyCalendar(appState.selectedWeekStart);
+            calendar.gymDay1 = day1;
+            calendar.gymDay2 = day2;
+            
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            daysOfWeek.forEach(dName => {
+                if (dName === day1) {
+                    calendar.days[dName] = { type: 'gym', desc: 'Fuerza: Día 1', notes: 'Gimnasio - Rutina Completa' };
+                } else if (dName === day2) {
+                    calendar.days[dName] = { type: 'gym', desc: 'Fuerza: Día 2', notes: 'Gimnasio - Rutina Completa' };
+                } else {
+                    calendar.days[dName] = { type: 'rest', desc: 'Descanso / Actividad Suave', notes: 'Cumplir objetivo de pasos' };
+                }
+            });
+
+            saveState();
+        }
+
+        function updateStepsGoalConfig() {
+            const goal = parseInt(document.getElementById('input-steps-goal').value) || 8000;
+            appState.dailyStepsGoal = goal;
+            saveState();
+        }
+
+        function updateTargetWeightConfig() {
+            const target = parseFloat(document.getElementById('input-target-weight').value) || 75.0;
+            appState.targetWeight = target;
+            saveState();
+        }
+
+        // --- SECTION SWITCHING ---
+        function switchSection(sectionId) {
+            document.querySelectorAll('.tab-content').forEach(sect => {
+                sect.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Highlight active tab button
+            const tabButtons = document.querySelectorAll('.nav-tab');
+            tabButtons.forEach(btn => {
+                if (btn.innerText.includes(sectionId.split('-')[1].charAt(0).toUpperCase() + sectionId.split('-')[1].slice(1))) {
+                    btn.classList.add('active');
+                } else if (sectionId === 'tab-routine' && btn.innerText.includes('Rutina')) {
+                    btn.classList.add('active');
+                } else if (sectionId === 'tab-calendar' && btn.innerText.includes('Calendario')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            if (sectionId === 'tab-weight') {
+                setTimeout(drawWeightChart, 100);
+            } else if (sectionId === 'tab-steps') {
+                setTimeout(drawStepsChart, 100);
+            }
+        }
+
+        // --- CALENDAR RENDERER ---
+        function renderCalendar() {
+            const calendar = getOrCreateWeeklyCalendar(appState.selectedWeekStart);
+            
+            document.getElementById('select-gymday1').value = calendar.gymDay1 || appState.gymDay1;
+            document.getElementById('select-gymday2').value = calendar.gymDay2 || appState.gymDay2;
+
+            const container = document.getElementById('calendar-grid-container');
+            container.innerHTML = '';
+            
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const mondayDate = new Date(appState.selectedWeekStart + "T00:00:00");
+
+            daysOfWeek.forEach((dName, idx) => {
+                const dayData = calendar.days[dName] || { type: 'rest', desc: 'Descanso', notes: '' };
+                const dayDate = new Date(mondayDate);
+                dayDate.setDate(mondayDate.getDate() + idx);
+                
+                const dateStr = toLocalISOString(dayDate);
+                const dateLbl = `${dayDate.getDate()}/${String(dayDate.getMonth()+1).padStart(2,'0')}`;
+
+                const stepsLog = appState.stepsLogs ? appState.stepsLogs[dateStr] : null;
+                const stepsTxt = stepsLog && stepsLog.steps !== undefined ? `👟 ${stepsLog.steps.toLocaleString()} pasos` : '👟 -- pasos';
+
+                const row = document.createElement('div');
+                row.className = `cal-day-row active-${dayData.type}`;
+
+                let badgeClass = 'cal-badge-rest';
+                let badgeTxt = 'Descanso';
+                if (dayData.type === 'gym') { 
+                    badgeClass = 'cal-badge-gym'; 
+                    badgeTxt = dayData.desc.includes('Día 1') ? 'Fuerza D1' : 'Fuerza D2'; 
+                }
+
+                row.innerHTML = `
+                    <div class="cal-day-name">${dName} <small style="display:block; font-weight:400; font-size:0.7rem; color:var(--text-muted);">${dateLbl}</small></div>
+                    <div class="cal-day-badge ${badgeClass}">${badgeTxt}</div>
+                    <div class="cal-day-desc">
+                        <strong style="color:#fff;">${dayData.desc}</strong>
+                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${dayData.notes}</div>
+                    </div>
+                    <div class="cal-day-steps">${stepsTxt}</div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // --- ROUTINE & EXERCISE LOGGER ---
+        function switchRoutineDay(dayNum) {
+            appState.activeRoutineDay = dayNum;
+            document.querySelectorAll('.routine-day-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`rday-btn-${dayNum}`).classList.add('active');
+            renderRoutine();
+        }
+
+        function toggleInstructions(id) {
+            const content = document.getElementById(`inst-${id}`);
+            const btn = event.target;
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                btn.innerText = '▶ Ver claves técnicas';
+            } else {
+                content.style.display = 'block';
+                btn.innerText = '▼ Ocultar claves técnicas';
+            }
+        }
+
+        async function toggleSetCheck(exeId, setIdx, dateKey) {
+            if (!appState.gymLogs[dateKey]) {
+                appState.gymLogs[dateKey] = {};
+            }
+            if (!appState.gymLogs[dateKey][exeId]) {
+                appState.gymLogs[dateKey][exeId] = [];
+            }
+
+            const weightVal = parseFloat(document.getElementById(`weight-${exeId}-${setIdx}`).value) || 0;
+            const repsVal = parseInt(document.getElementById(`reps-${exeId}-${setIdx}`).value) || 0;
+            const rirVal = document.getElementById(`rir-${exeId}-${setIdx}`).value;
+
+            const existing = appState.gymLogs[dateKey][exeId][setIdx];
+            const btn = event.currentTarget;
+
+            if (existing && existing.completed) {
+                appState.gymLogs[dateKey][exeId][setIdx] = { completed: false, weight: 0, reps: 0, rir: "" };
+                btn.classList.remove('checked');
+            } else {
+                appState.gymLogs[dateKey][exeId][setIdx] = {
+                    completed: true,
+                    weight: weightVal,
+                    reps: repsVal,
+                    rir: rirVal
+                };
+                btn.classList.add('checked');
+            }
+            saveState();
+            checkSessionCompletion(dateKey);
+
+            // Direct sync with local disk file
+            await syncGymFile();
+        }
+
+        function checkSessionCompletion(dateKey) {
+            const badge = document.getElementById('routine-completion-badge');
+            const activeBlock = getActiveBlockForSelectedWeek();
+            if (!activeBlock) {
+                badge.style.display = 'none';
+                return;
+            }
+            
+            const blockData = EXERCISES_DB[activeBlock];
+            const dayData = blockData[`d${appState.activeRoutineDay}`];
+            
+            let totalSets = 0;
+            let completedSets = 0;
+
+            dayData.blocks.forEach(blk => {
+                blk.items.forEach(exe => {
+                    totalSets += exe.sets;
+                    const logs = appState.gymLogs[dateKey] ? appState.gymLogs[dateKey][exe.id] : null;
+                    if (logs) {
+                        for (let s = 0; s < exe.sets; s++) {
+                            if (logs[s] && logs[s].completed) {
+                                completedSets++;
+                            }
+                        }
+                    }
+                });
+            });
+
+            if (completedSets > 0 && completedSets === totalSets) {
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderRoutine() {
+            const activeBlock = getActiveBlockForSelectedWeek();
+            
+            const blockHeader = document.getElementById('routine-block-header');
+            const daySelectContainer = document.getElementById('routine-day-select-container');
+            const sessionCard = document.getElementById('routine-session-card');
+            const emptyCard = document.getElementById('routine-empty-card');
+            
+            const weekNum = getWeekNumber(appState.selectedWeekStart);
+            
+            if (!activeBlock) {
+                // Fuera del rango de planificación activa (más de 16 semanas o anterior)
+                if (blockHeader) {
+                    if (weekNum < 1) {
+                        blockHeader.innerText = `Antes de Iniciar Planificación`;
+                    } else {
+                        blockHeader.innerText = `Semana ${weekNum} - Sin Rutina Programada`;
+                    }
+                }
+                if (daySelectContainer) daySelectContainer.style.display = 'none';
+                if (sessionCard) sessionCard.style.display = 'none';
+                if (emptyCard) {
+                    emptyCard.style.display = 'flex';
+                    const pText = emptyCard.querySelector('p');
+                    if (pText) {
+                        if (weekNum < 1) {
+                            pText.innerText = "La planificación de fuerza oficial inicia el 08/06/2026. Selecciona una semana posterior para empezar.";
+                        } else {
+                            pText.innerText = "No hay rutinas de gimnasio programadas para esta semana. El plan inicial contempla las primeras 16 semanas de entrenamiento.";
+                        }
+                    }
+                }
+                const container = document.getElementById('exercise-list-container');
+                container.innerHTML = '';
+                return;
+            }
+            
+            // Semana Activa (1 a 16)
+            if (blockHeader) {
+                let blockText = '';
+                if (activeBlock === 'mes1') blockText = 'Mes 1 - Adaptación (Semanas 1-4)';
+                else if (activeBlock === 'mes2') blockText = 'Mes 2 - Progreso (Semanas 5-8)';
+                else if (activeBlock === 'mes3') blockText = 'Mes 3 - Transición Mancuernas (Semanas 9-12)';
+                else if (activeBlock === 'mes4') blockText = 'Mes 4 - Sentadilla Libre (Semanas 13-16)';
+                
+                blockHeader.innerText = `Semana ${weekNum} - ${blockText}`;
+            }
+            if (daySelectContainer) daySelectContainer.style.display = 'flex';
+            if (sessionCard) sessionCard.style.display = 'flex';
+            if (emptyCard) emptyCard.style.display = 'none';
+
+            const blockData = EXERCISES_DB[activeBlock];
+            const dayData = blockData[`d${appState.activeRoutineDay}`];
+            
+            const gymDays = getGymDaysOfSelectedWeek();
+
+            // Set labels and dates for the Day selector buttons
+            for (let dNum = 1; dNum <= 2; dNum++) {
+                const gDay = gymDays[dNum - 1];
+                const btnDateLbl = document.getElementById(`rday-date-${dNum}`);
+                if (gDay) {
+                    btnDateLbl.innerText = gDay.label.split(' ')[1]; // date label like (09/06)
+                    document.getElementById(`rday-btn-${dNum}`).disabled = false;
+                    document.getElementById(`rday-btn-${dNum}`).style.opacity = '1';
+                } else {
+                    btnDateLbl.innerText = "No prog.";
+                    document.getElementById(`rday-btn-${dNum}`).disabled = true;
+                    document.getElementById(`rday-btn-${dNum}`).style.opacity = '0.4';
+                }
+            }
+
+            const currentGymDay = gymDays[appState.activeRoutineDay - 1];
+            const dateKey = currentGymDay ? currentGymDay.dateStr : appState.selectedWeekStart;
+
+            document.getElementById('routine-session-title').innerText = dayData.title;
+
+            // Formated date label
+            const dObj = new Date(dateKey + "T00:00:00");
+            const dFormatted = dObj.toLocaleDateString('es-ES', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('routine-session-date').innerText = `Sesión para el ${dFormatted}`;
+
+            const container = document.getElementById('exercise-list-container');
+            container.innerHTML = '';
+
+            dayData.blocks.forEach(blk => {
+                const blockHeaderElement = document.createElement('h3');
+                blockHeaderElement.style.fontSize = '0.8rem';
+                blockHeaderElement.style.textTransform = 'uppercase';
+                blockHeaderElement.style.color = 'var(--text-muted)';
+                blockHeaderElement.style.marginTop = '10px';
+                blockHeaderElement.style.borderLeft = '3px solid var(--accent-purple)';
+                blockHeaderElement.style.paddingLeft = '6px';
+                blockHeaderElement.innerText = blk.name;
+                container.appendChild(blockHeaderElement);
+
+                blk.items.forEach(exe => {
+                    const card = document.createElement('div');
+                    card.className = `exe-card ${exe.type}`;
+
+                    let badgeClass = 'fuerza';
+                    let typeTxt = 'Fuerza';
+                    if (exe.type === 'core') { badgeClass = 'cor'; typeTxt = 'Core'; }
+
+                    const loggedToday = appState.gymLogs[dateKey] ? appState.gymLogs[dateKey][exe.id] : null;
+
+                    let loggerRowsHTML = '';
+                    let defaultWeightNumeric = parseFloat(exe.weight) || 0;
+                    // For reps: if it says RIR3/RIR1, we set standard default reps to 10 or 12 for easy input. If it says 30 pasos or 30s we use 30.
+                    let defaultRepsNumeric = 10;
+                    if (exe.reps.includes("pasos") || exe.reps.includes("seg")) {
+                        defaultRepsNumeric = parseInt(exe.reps) || 30;
+                    }
+
+                    for (let s = 0; s < exe.sets; s++) {
+                        const setLog = (loggedToday && loggedToday[s]) ? loggedToday[s] : { completed: false, weight: defaultWeightNumeric, reps: defaultRepsNumeric, rir: "" };
+                        const checkedClass = setLog.completed ? 'checked' : '';
+                        
+                        loggerRowsHTML += `
+                            <tr>
+                                <td style="font-weight:700; color:var(--text-muted); font-size:0.8rem;">S${s+1}</td>
+                                <td>
+                                    <input type="number" id="weight-${exe.id}-${s}" step="0.5" value="${setLog.weight || defaultWeightNumeric}" style="max-width: 65px;">
+                                </td>
+                                <td>
+                                    <input type="number" id="reps-${exe.id}-${s}" step="1" value="${setLog.reps || defaultRepsNumeric}" style="max-width: 60px;">
+                                </td>
+                                <td>
+                                    <select id="rir-${exe.id}-${s}" style="padding:6px; font-size:0.8rem; max-width: 60px;">
+                                        <option value="" ${setLog.rir === "" ? "selected" : ""}>-</option>
+                                        <option value="0" ${setLog.rir === "0" ? "selected" : ""}>0</option>
+                                        <option value="1" ${setLog.rir === "1" ? "selected" : ""}>1</option>
+                                        <option value="2" ${setLog.rir === "2" ? "selected" : ""}>2</option>
+                                        <option value="3" ${setLog.rir === "3" ? "selected" : ""}>3</option>
+                                        <option value="4" ${setLog.rir === "4" ? "selected" : ""}>4</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="btn-check-set ${checkedClass}" onclick="toggleSetCheck('${exe.id}', ${s}, '${dateKey}')">✓</button>
+                                </td>
+                            </tr>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <div class="exe-header">
+                            <div class="exe-title-area">
+                                <span class="exe-name">${exe.name}</span>
+                                <div class="exe-tag-row" style="display: flex; gap: 4px; align-items: center;">
+                                    <span class="exe-badge ${badgeClass}">${typeTxt}</span>
+                                    ${(exe.name.startsWith("A1.") || exe.name.startsWith("A2.") || exe.name.startsWith("B1.") || exe.name.startsWith("B2.")) ? `<span class="exe-badge superserie">Superserie</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="exe-stats-grid">
+                            <div class="exe-stat-item"><span class="exe-stat-lbl">Series</span><span class="exe-stat-val">${exe.sets}</span></div>
+                            <div class="exe-stat-item"><span class="exe-stat-lbl">Reps Plan</span><span class="exe-stat-val">${exe.reps}</span></div>
+                            <div class="exe-stat-item"><span class="exe-stat-lbl">Carga Plan</span><span class="exe-stat-val">${exe.weight}</span></div>
+                            <div class="exe-stat-item"><span class="exe-stat-lbl">Descanso</span><span class="exe-stat-val">${exe.rest}</span></div>
+                            <div class="exe-stat-item"><span class="exe-stat-lbl">Tempo</span><span class="exe-stat-val">${exe.tempo}</span></div>
+                        </div>
+
+                        <div class="exe-desc">${exe.desc}</div>
+
+                        ${exe.tips ? `
+                            <button class="exe-details-btn" onclick="toggleInstructions('${exe.id}')">▶ Ver claves técnicas</button>
+                            <div class="exe-details-content" id="inst-${exe.id}">
+                                <div style="margin-bottom:4px; color:#a7f3d0;">💡 <strong>Consejo:</strong> ${exe.tips}</div>
+                            </div>
+                        ` : ''}
+
+                        <div class="logger-area">
+                            <div class="logger-title">Registrar Series del Día</div>
+                            <table class="logger-table">
+                                <thead>
+                                    <tr>
+                                        <th>Serie</th>
+                                        <th>Carga (kg)</th>
+                                        <th>Reps</th>
+                                        <th>RIR Real</th>
+                                        <th>Clavar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${loggerRowsHTML}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+
+            checkSessionCompletion(dateKey);
+        }
+
+        // --- WEIGHT TRACKER MODULE ---
+        async function addWeightLog() {
+            const dateInput = document.getElementById('weight-input-date').value;
+            const weightInput = parseFloat(document.getElementById('weight-input-value').value);
+            const notesInput = document.getElementById('weight-input-notes').value;
+
+            if (!dateInput || isNaN(weightInput)) {
+                alert("Por favor, introduce una fecha y un peso válido.");
+                return;
+            }
+
+            // Remove if date already exists
+            appState.weightLogs = appState.weightLogs.filter(log => log.date !== dateInput);
+
+            appState.weightLogs.push({
+                date: dateInput,
+                weight: weightInput,
+                notes: notesInput
+            });
+
+            appState.weightLogs.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            saveState();
+
+            document.getElementById('weight-input-value').value = '';
+            document.getElementById('weight-input-notes').value = '';
+
+            // Direct sync with local file
+            await syncWeightFile();
+        }
+
+        function deleteWeightLog(idx) {
+            if (confirm("¿Seguro que quieres borrar este registro de peso?")) {
+                appState.weightLogs.splice(idx, 1);
+                saveState();
+                syncWeightFile();
+            }
+        }
+
+        function renderWeightTracker() {
+            // Set input date to monday of selected week by default
+            if (!document.getElementById('weight-input-date').value) {
+                document.getElementById('weight-input-date').value = appState.selectedWeekStart;
+            }
+
+            const tbody = document.getElementById('weight-history-tbody');
+            tbody.innerHTML = '';
+
+            // Calculate variation and fill table
+            appState.weightLogs.forEach((log, idx) => {
+                let variation = "-";
+                let variationClass = "";
+                
+                if (idx > 0) {
+                    const diff = log.weight - appState.weightLogs[idx-1].weight;
+                    variation = diff.toFixed(1) + " kg";
+                    if (diff < 0) {
+                        variationClass = "text-loss";
+                    } else if (diff > 0) {
+                        variation = "+" + variation;
+                        variationClass = "text-gain";
+                    }
+                }
+
+                const dFormatted = new Date(log.date + "T00:00:00").toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:600;">${dFormatted}</td>
+                    <td style="font-weight:700; color:#fff;">${log.weight.toFixed(1)} kg</td>
+                    <td class="${variationClass}">${variation}</td>
+                    <td style="font-size:0.75rem; color:var(--text-muted); max-width:180px; white-space:normal;">
+                        ${log.notes || ''}
+                        <button onclick="deleteWeightLog(${idx})" style="background:none; border:none; color:var(--accent-red); cursor:pointer; margin-left:4px; font-weight:700;">✕</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update banner weight with latest value
+            if (appState.weightLogs.length > 0) {
+                const latestWeight = appState.weightLogs[appState.weightLogs.length - 1].weight;
+                document.getElementById('banner-weight').innerText = `${latestWeight.toFixed(1)} kg`;
+                
+                // Update progress bar
+                const startWeight = (appState.weightLogs && appState.weightLogs.length > 0) ? appState.weightLogs[0].weight : (parseFloat(appState.profile?.initialWeight) || 90.0);
+                const targetWeight = appState.targetWeight || 75.0;
+                
+                document.getElementById('banner-target-badge').innerText = `Meta: ${targetWeight.toFixed(1)} kg`;
+                document.getElementById('input-target-weight').value = targetWeight;
+
+                let progressPercent = 0;
+                if (latestWeight <= targetWeight) {
+                    progressPercent = 100;
+                } else if (latestWeight >= startWeight) {
+                    progressPercent = 0;
+                } else {
+                    progressPercent = Math.round(((startWeight - latestWeight) / (startWeight - targetWeight)) * 100);
+                }
+                
+                document.getElementById('weight-progress-percent').innerText = `${progressPercent}%`;
+                document.getElementById('weight-progress-bar').style.width = `${progressPercent}%`;
+            } else {
+                document.getElementById('banner-weight').innerText = `-- kg`;
+                document.getElementById('weight-progress-percent').innerText = `0%`;
+                document.getElementById('weight-progress-bar').style.width = `0%`;
+            }
+
+            drawWeightChart();
+        }
+
+        // --- DRAW WEIGHT CANVAS CHART ---
+        function drawWeightChart() {
+            const canvas = document.getElementById('weightChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+            ctx.scale(2, 2);
+
+            const w = rect.width;
+            const h = rect.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const logs = appState.weightLogs;
+            if (logs.length === 0) return;
+
+            const paddingLeft = 35;
+            const paddingRight = 15;
+            const paddingTop = 20;
+            const paddingBottom = 25;
+
+            const graphWidth = w - paddingLeft - paddingRight;
+            const graphHeight = h - paddingTop - paddingBottom;
+
+            let minW = appState.targetWeight || 75.0;
+            let maxW = (appState.weightLogs && appState.weightLogs.length > 0) ? appState.weightLogs[0].weight : (parseFloat(appState.profile?.initialWeight) || 90.0);
+            if (minW > maxW) {
+                const temp = minW;
+                minW = maxW;
+                maxW = temp;
+            }
+
+            logs.forEach(log => {
+                if (log.weight < minW) minW = log.weight;
+                if (log.weight > maxW) maxW = log.weight;
+            });
+            minW = Math.floor(minW - 1);
+            maxW = Math.ceil(maxW + 1);
+
+            const targetWeight = appState.targetWeight || 75.0;
+
+            const targetY = paddingTop + graphHeight - ((targetWeight - minW) / (maxW - minW)) * graphHeight;
+            ctx.strokeStyle = '#049669';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(paddingLeft, targetY);
+            ctx.lineTo(w - paddingRight, targetY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#059669';
+            ctx.font = 'bold 8px Outfit';
+            ctx.fillText(`META ${targetWeight.toFixed(1)} kg`, paddingLeft + 5, targetY - 4);
+
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '8px Outfit';
+            ctx.textAlign = 'right';
+            const gridLines = 4;
+            for (let i = 0; i <= gridLines; i++) {
+                const weightVal = minW + (i / gridLines) * (maxW - minW);
+                const y = paddingTop + graphHeight - (i / gridLines) * graphHeight;
+                ctx.fillText(weightVal.toFixed(1) + " kg", paddingLeft - 5, y + 3);
+
+                ctx.strokeStyle = '#1e2538';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(paddingLeft, y);
+                ctx.lineTo(w - paddingRight, y);
+                ctx.stroke();
+            }
+
+            if (logs.length > 0) {
+                const points = logs.map((log, idx) => {
+                    const x = paddingLeft + (idx / Math.max(1, logs.length - 1)) * graphWidth;
+                    const y = paddingTop + graphHeight - ((log.weight - minW) / (maxW - minW)) * graphHeight;
+                    return { x, y, weight: log.weight, date: log.date };
+                });
+
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 3;
+                ctx.shadowColor = 'rgba(59, 130, 246, 0.4)';
+                ctx.shadowBlur = 6;
+                ctx.beginPath();
+                points.forEach((pt, idx) => {
+                    if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                });
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                const fillGrad = ctx.createLinearGradient(0, paddingTop, 0, paddingTop + graphHeight);
+                fillGrad.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
+                fillGrad.addColorStop(1, 'rgba(59, 130, 246, 0.00)');
+                ctx.fillStyle = fillGrad;
+                ctx.beginPath();
+                ctx.moveTo(paddingLeft, paddingTop + graphHeight);
+                points.forEach((pt) => {
+                    ctx.lineTo(pt.x, pt.y);
+                });
+                ctx.lineTo(paddingLeft + graphWidth, paddingTop + graphHeight);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.textAlign = 'center';
+                points.forEach((pt, idx) => {
+                    ctx.fillStyle = '#3b82f6';
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 8px Outfit';
+                    ctx.fillText(pt.weight.toFixed(1), pt.x, pt.y - 8);
+
+                    if (logs.length < 8 || idx % 2 === 0 || idx === logs.length - 1) {
+                        const dStr = new Date(pt.date + "T00:00:00").toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+                        ctx.fillStyle = '#9ca3af';
+                        ctx.font = '8px Outfit';
+                        ctx.fillText(dStr, pt.x, paddingTop + graphHeight + 12);
+                    }
+                });
+            }
+        }
+
+        // --- STEPS TRACKER MODULE ---
+        function renderStepsTracker() {
+            const container = document.getElementById('steps-week-inputs-container');
+            container.innerHTML = '';
+
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const mondayDate = new Date(appState.selectedWeekStart + "T00:00:00");
+            const goal = appState.dailyStepsGoal || 8000;
+            document.getElementById('input-steps-goal').value = goal;
+
+            let weeklyTotal = 0;
+            let loggedDaysCount = 0;
+
+            daysOfWeek.forEach((dName, idx) => {
+                const dayDate = new Date(mondayDate);
+                dayDate.setDate(mondayDate.getDate() + idx);
+                const dateStr = toLocalISOString(dayDate);
+                const dateLbl = `${dayDate.getDate()}/${String(dayDate.getMonth()+1).padStart(2,'0')}`;
+
+                const log = appState.stepsLogs[dateStr] || { steps: "", notes: "" };
+                
+                if (log.steps !== "" && log.steps !== undefined) {
+                    const stepsVal = parseInt(log.steps) || 0;
+                    weeklyTotal += stepsVal;
+                    loggedDaysCount++;
+                }
+
+                const div = document.createElement('div');
+                div.className = 'steps-day-row';
+                div.innerHTML = `
+                    <div class="steps-day-name">${dName} <small style="display:block; font-weight:400; color:var(--text-muted);">${dateLbl}</small></div>
+                    <div>
+                        <input type="number" id="steps-${dateStr}" placeholder="Ej. 10000" value="${log.steps !== undefined ? log.steps : ''}" style="padding:6px; text-align:center;">
+                    </div>
+                    <div>
+                        <input type="text" id="steps-notes-${dateStr}" placeholder="Ej. Caminata tarde, activa" value="${log.notes || ''}" style="padding:6px;">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            // Update stats
+            document.getElementById('stats-total-steps').innerText = weeklyTotal.toLocaleString();
+            
+            const avgSteps = loggedDaysCount > 0 ? Math.round(weeklyTotal / loggedDaysCount) : 0;
+            document.getElementById('stats-avg-steps').innerText = avgSteps.toLocaleString();
+            
+            const achievementPercent = goal > 0 ? Math.round((avgSteps / goal) * 100) : 0;
+            document.getElementById('stats-goal-comparison').innerText = `${achievementPercent}% vs Meta (${(goal/1000).toFixed(0)}k)`;
+            
+            const activeKcal = Math.round(weeklyTotal * 0.04);
+            document.getElementById('stats-kcal-burned').innerText = `${activeKcal.toLocaleString()} kcal`;
+
+            drawStepsChart();
+        }
+
+        async function saveWeeklySteps() {
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const mondayDate = new Date(appState.selectedWeekStart + "T00:00:00");
+
+            daysOfWeek.forEach((dName, idx) => {
+                const dayDate = new Date(mondayDate);
+                dayDate.setDate(mondayDate.getDate() + idx);
+                const dateStr = toLocalISOString(dayDate);
+
+                const stepsValRaw = document.getElementById(`steps-${dateStr}`).value;
+                const notesVal = document.getElementById(`steps-notes-${dateStr}`).value;
+
+                if (stepsValRaw.trim() === "") {
+                    // Delete key if existed and was cleared
+                    delete appState.stepsLogs[dateStr];
+                } else {
+                    appState.stepsLogs[dateStr] = {
+                        steps: parseInt(stepsValRaw) || 0,
+                        notes: notesVal
+                    };
+                }
+            });
+
+            saveState();
+            alert("¡Pasos semanales guardados y sincronizados!");
+
+            // Sync to CSV file
+            await syncStepsFile();
+        }
+
+        // --- DRAW STEPS CANVAS CHART ---
+        function drawStepsChart() {
+            const canvas = document.getElementById('stepsChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+            ctx.scale(2, 2);
+
+            const w = rect.width;
+            const h = rect.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const mondayDate = new Date(appState.selectedWeekStart + "T00:00:00");
+            const goal = appState.dailyStepsGoal || 8000;
+
+            const paddingLeft = 35;
+            const paddingRight = 15;
+            const paddingTop = 20;
+            const paddingBottom = 25;
+
+            const graphWidth = w - paddingLeft - paddingRight;
+            const graphHeight = h - paddingTop - paddingBottom;
+
+            // Find max steps to scale chart
+            let maxSteps = goal * 1.2;
+            const stepsData = [];
+
+            daysOfWeek.forEach((dName, idx) => {
+                const dayDate = new Date(mondayDate);
+                dayDate.setDate(mondayDate.getDate() + idx);
+                const dateStr = toLocalISOString(dayDate);
+                const log = appState.stepsLogs[dateStr];
+                const stepsVal = log && log.steps !== undefined ? log.steps : 0;
+                
+                if (stepsVal > maxSteps) maxSteps = stepsVal;
+                stepsData.push({ dayName: dName, dateLbl: `${dayDate.getDate()}/${dayDate.getMonth()+1}`, steps: stepsVal, logged: log !== undefined });
+            });
+
+            maxSteps = Math.ceil(maxSteps / 2000) * 2000;
+
+            // Draw target goal line
+            const goalY = paddingTop + graphHeight - (goal / maxSteps) * graphHeight;
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(paddingLeft, goalY);
+            ctx.lineTo(w - paddingRight, goalY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.8)';
+            ctx.font = 'bold 8px Outfit';
+            ctx.fillText(`META ${goal.toLocaleString()}`, paddingLeft + 5, goalY - 4);
+
+            // Draw Y Axis Grid
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '8px Outfit';
+            ctx.textAlign = 'right';
+            const gridLines = 4;
+            for (let i = 0; i <= gridLines; i++) {
+                const stepVal = (i / gridLines) * maxSteps;
+                const y = paddingTop + graphHeight - (i / gridLines) * graphHeight;
+                ctx.fillText((stepVal/1000).toFixed(0) + "k", paddingLeft - 5, y + 3);
+
+                ctx.strokeStyle = '#1e2538';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(paddingLeft, y);
+                ctx.lineTo(w - paddingRight, y);
+                ctx.stroke();
+            }
+
+            // Draw Bars
+            const barSpacing = 8;
+            const totalBars = 7;
+            const barWidth = (graphWidth - (barSpacing * (totalBars - 1))) / totalBars;
+
+            stepsData.forEach((data, idx) => {
+                const x = paddingLeft + idx * (barWidth + barSpacing);
+                const barHeight = (data.steps / maxSteps) * graphHeight;
+                const y = paddingTop + graphHeight - barHeight;
+
+                if (data.logged && data.steps > 0) {
+                    // Color code based on goal
+                    let barGrad = ctx.createLinearGradient(0, y, 0, paddingTop + graphHeight);
+                    if (data.steps >= goal) {
+                        barGrad.addColorStop(0, '#10b981'); // Emerald Green
+                        barGrad.addColorStop(1, '#047857');
+                    } else if (data.steps >= goal * 0.7) {
+                        barGrad.addColorStop(0, '#f59e0b'); // Amber
+                        barGrad.addColorStop(1, '#b45309');
+                    } else {
+                        barGrad.addColorStop(0, '#ef4444'); // Red
+                        barGrad.addColorStop(1, '#b91c1c');
+                    }
+
+                    ctx.fillStyle = barGrad;
+                    // Draw rounded top bar
+                    ctx.beginPath();
+                    if (ctx.roundRect) {
+                        ctx.roundRect(x, y, barWidth, barHeight, [4, 4, 0, 0]);
+                    } else {
+                        ctx.rect(x, y, barWidth, barHeight);
+                    }
+                    ctx.fill();
+
+                    // Text value above bar
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 7px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText((data.steps/1000).toFixed(1) + "k", x + barWidth / 2, y - 4);
+                } else {
+                    // Dotted outline for unlogged or zero days
+                    ctx.strokeStyle = '#1e2538';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([2, 2]);
+                    ctx.beginPath();
+                    if (ctx.roundRect) {
+                        ctx.roundRect(x, paddingTop + graphHeight - 4, barWidth, 4, [2, 2, 0, 0]);
+                    } else {
+                        ctx.rect(x, paddingTop + graphHeight - 4, barWidth, 4);
+                    }
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // Day Labels
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = '8px Outfit';
+                ctx.textAlign = 'center';
+                ctx.fillText(data.dayName.substring(0, 2), x + barWidth / 2, paddingTop + graphHeight + 12);
+                ctx.font = '6px Outfit';
+                ctx.fillStyle = '#6b7280';
+                ctx.fillText(data.dateLbl, x + barWidth / 2, paddingTop + graphHeight + 20);
+            });
+        }
+
+        // --- DATA BACKUP & CSV MANUAL EXPORT ---
+        function renderDataSync() {
+            const dataArea = document.getElementById('json-data-area');
+            dataArea.value = JSON.stringify(appState, null, 2);
+        }
+
+        function copyJsonToClipboard() {
+            const dataArea = document.getElementById('json-data-area');
+            dataArea.select();
+            document.execCommand('copy');
+            alert("¡Copia de seguridad en JSON copiada al portapapeles con éxito!");
+        }
+
+        function importJsonData() {
+            const jsonText = document.getElementById('import-json-input').value.trim();
+            if (!jsonText) {
+                alert("Por favor, pega el JSON antes de importar.");
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(jsonText);
+                if (parsed.weightLogs && parsed.gymLogs && parsed.stepsLogs) {
+                    appState = parsed;
+                    appState.selectedWeekStart = getMondayOfCurrentWeek();
+                    saveState();
+                    document.getElementById('import-json-input').value = '';
+                    alert("¡Datos sincronizados e importados con éxito!");
+                } else {
+                    alert("El JSON no tiene la estructura de base de datos correcta.");
+                }
+            } catch (e) {
+                alert("Error al analizar el JSON. Copia el texto completo.");
+            }
+        }
+
+        function exportWeightToCSV() {
+            const csvContent = generateWeightCSV();
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "registro_peso_semanal.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportGymToCSV() {
+            const csvContent = generateGymCSV();
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "registro_fuerza_gimnasio.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportStepsToCSV() {
+            const csvContent = generateStepsCSV();
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "registro_pasos_semanal.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function resetDatabase() {
+            if (confirm("🚨 ¿Seguro que quieres borrar TODOS los datos y volver a la configuración inicial?")) {
+                appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                appState.selectedWeekStart = getMondayOfCurrentWeek();
+                saveState();
+                alert("Base de datos reseteada.");
+            }
+        }
+
+        // --- PASSWORD PROTECTION & LOCK SCREEN ---
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function toggleRememberMe() {
+            const cb = document.getElementById('lock-remember-checkbox');
+            if (cb) cb.checked = !cb.checked;
+        }
+
+        window.activePassword = '';
+
+        // --- BASE64 & CRYPTO ENCRYPTION HELPERS ---
+        function bufferToBase64(buf) {
+            const bin = String.fromCharCode.apply(null, new Uint8Array(buf));
+            return btoa(bin);
+        }
+
+        function base64ToBuffer(b64) {
+            const bin = atob(b64);
+            const buf = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) {
+                buf[i] = bin.charCodeAt(i);
+            }
+            return buf.buffer;
+        }
+
+        async function deriveKeyFromPassword(password) {
+            const encoder = new TextEncoder();
+            const hash = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+            return crypto.subtle.importKey(
+                'raw',
+                hash,
+                { name: 'AES-GCM' },
+                false,
+                ['encrypt', 'decrypt']
+            );
+        }
+
+        async function encryptPayload(plaintext, password) {
+            const encoder = new TextEncoder();
+            const key = await deriveKeyFromPassword(password);
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const ciphertext = await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv: iv },
+                key,
+                encoder.encode(plaintext)
+            );
+            return {
+                encrypted: true,
+                iv: bufferToBase64(iv),
+                data: bufferToBase64(ciphertext)
+            };
+        }
+
+        async function decryptPayload(payload, password) {
+            const decoder = new TextDecoder();
+            const key = await deriveKeyFromPassword(password);
+            const iv = base64ToBuffer(payload.iv);
+            const ciphertext = base64ToBuffer(payload.data);
+            const decrypted = await crypto.subtle.decrypt(
+                { name: 'AES-GCM', iv: iv },
+                key,
+                ciphertext
+            );
+            return decoder.decode(decrypted);
+        }
+
+        function getActivePassword() {
+            return window.activePassword ||
+                   sessionStorage.getItem('cachedSessionKey') ||
+                   localStorage.getItem('cachedUnlockKey') ||
+                   '';
+        }
+
+        async function checkLockState() {
+            const lockScreen = document.getElementById('dashboard-lock-screen');
+            const container = document.querySelector('.container');
+
+            if (!lockScreen || !container) return false;
+
+            // Hide container by default until checked
+            container.style.display = 'none';
+
+            if (!appState.passwordHash) {
+                // First visit: Setup password and profile details
+                lockScreen.style.display = 'flex';
+                document.getElementById('lock-title').innerText = "Crea tu Perfil y Contraseña";
+                document.getElementById('lock-subtitle').innerText = "Crea un perfil de atleta y contraseña para proteger tus datos.";
+                document.getElementById('lock-setup-form').style.display = 'block';
+                document.getElementById('lock-login-form').style.display = 'none';
+                return true; // Locked (setup needed)
+            }
+
+            const isUnlocked = sessionStorage.getItem('isDashboardUnlocked') === 'true' ||
+                               localStorage.getItem('rememberDeviceUnlock') === 'true';
+
+            if (isUnlocked) {
+                lockScreen.style.display = 'none';
+                container.style.display = 'block';
+                return false; // Unlocked
+            } else {
+                // Show login form
+                lockScreen.style.display = 'flex';
+                document.getElementById('lock-title').innerText = "Panel Protegido";
+                document.getElementById('lock-subtitle').innerText = "Introduce tu contraseña para acceder a la preparación física.";
+                document.getElementById('lock-setup-form').style.display = 'none';
+                document.getElementById('lock-login-form').style.display = 'block';
+
+                // Focus input
+                setTimeout(() => {
+                    const inp = document.getElementById('lock-password-input');
+                    if (inp) inp.focus();
+                }, 100);
+                return true; // Locked
+            }
+        }
+
+        async function setupNewPassword() {
+            const name = document.getElementById('lock-setup-name').value.trim();
+            const age = document.getElementById('lock-setup-age').value.trim();
+            const height = document.getElementById('lock-setup-height').value.trim();
+            const initialW = document.getElementById('lock-setup-initialweight').value.trim();
+            const targetW = document.getElementById('lock-setup-target').value.trim();
+            const p1 = document.getElementById('lock-new-password').value;
+            const p2 = document.getElementById('lock-confirm-password').value;
+
+            if (!name || !age || !height || !initialW || !targetW) {
+                showLockError("Por favor, rellena todos los campos del perfil.");
+                return;
+            }
+            if (!p1) {
+                showLockError("Por favor, introduce una contraseña.");
+                return;
+            }
+            if (p1.length < 4) {
+                showLockError("La contraseña debe tener al menos 4 caracteres.");
+                return;
+            }
+            if (p1 !== p2) {
+                showLockError("Las contraseñas no coinciden.");
+                return;
+            }
+
+            try {
+                const hash = await hashPassword(p1);
+                appState.passwordHash = hash;
+                
+                // Initialize profile
+                appState.profile = {
+                    name: name,
+                    age: age,
+                    height: height,
+                    initialWeight: initialW,
+                    target: targetW
+                };
+                appState.targetWeight = parseFloat(targetW) || 75.0;
+
+                // Add initial weight log if logs are empty
+                if (appState.weightLogs.length === 0) {
+                    appState.weightLogs.push({
+                        date: toLocalISOString(new Date()),
+                        weight: parseFloat(initialW) || 90.0,
+                        notes: 'Peso Inicial (Registro de Configuración)'
+                    });
+                }
+
+                sessionStorage.setItem('isDashboardUnlocked', 'true');
+                
+                // Cache the password key locally
+                window.activePassword = p1;
+                sessionStorage.setItem('cachedSessionKey', p1);
+                
+                // Save state immediately
+                saveState(true);
+
+                // Auto-sync files to Drive if handles are already linked (they shouldn't be, but just in case)
+                await syncWeightFile().catch(() => {});
+
+                document.getElementById('dashboard-lock-screen').style.display = 'none';
+                await proceedWithOnload();
+            } catch (e) {
+                showLockError("Error al configurar la contraseña: " + e.message);
+            }
+        }
+
+        async function unlockDashboard() {
+            const p = document.getElementById('lock-password-input').value;
+            if (!p) {
+                showLockError("Por favor, introduce tu contraseña.");
+                return;
+            }
+
+            try {
+                const hash = await hashPassword(p);
+                if (hash === appState.passwordHash) {
+                    sessionStorage.setItem('isDashboardUnlocked', 'true');
+                    if (document.getElementById('lock-remember-checkbox').checked) {
+                        localStorage.setItem('rememberDeviceUnlock', 'true');
+                    }
+                    
+                    // Cache the key
+                    window.activePassword = p;
+                    sessionStorage.setItem('cachedSessionKey', p);
+                    localStorage.setItem('cachedUnlockKey', p);
+                    
+                    document.getElementById('dashboard-lock-screen').style.display = 'none';
+                    await proceedWithOnload();
+                } else {
+                    showLockError("Contraseña incorrecta.");
+                    const inp = document.getElementById('lock-password-input');
+                    if (inp) {
+                        inp.value = '';
+                        inp.focus();
+                    }
+                }
+            } catch (e) {
+                showLockError("Error al descifrar: " + e.message);
+            }
+        }
+
+        function showLockError(text) {
+            const div = document.getElementById('lock-error-msg');
+            if (div) {
+                div.innerText = text;
+                div.style.display = 'block';
+            }
+        }
+
+        function changeAccessPassword() {
+            if (confirm("¿Deseas cambiar tu contraseña de acceso actual?")) {
+                appState.passwordHash = '';
+                localStorage.removeItem('rememberDeviceUnlock');
+                localStorage.removeItem('cachedUnlockKey');
+                sessionStorage.removeItem('cachedSessionKey');
+                window.activePassword = '';
+                saveState(true);
+                window.location.reload();
+            }
+        }
+
+        // --- PROFILE MANAGEMENT ---
+        function saveProfileDetails() {
+            const name = document.getElementById('profile-input-name').value.trim();
+            const age = document.getElementById('profile-input-age').value.trim();
+            const height = document.getElementById('profile-input-height').value.trim();
+            const target = document.getElementById('profile-input-target').value.trim();
+
+            if (!name || !age || !height || !target) {
+                alert("Por favor, rellena todos los campos del perfil.");
+                return;
+            }
+
+            if (!appState.profile) appState.profile = {};
+            appState.profile.name = name;
+            appState.profile.age = age;
+            appState.profile.height = height;
+            appState.profile.target = target;
+            appState.targetWeight = parseFloat(target) || 75.0;
+
+            saveState();
+            updateUI();
+            alert("¡Perfil guardado correctamente y programado para sincronizarse!");
+        }
+
+        // --- GITHUB CLOUD SYNCHRONIZATION ---
+        function getGitHubHeaders() {
+            return {
+                'Authorization': `Bearer ${appState.githubSync.token}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json'
+            };
+        }
+
+        async function fetchRemoteState() {
+            const url = `https://api.github.com/repos/${appState.githubSync.username}/${appState.githubSync.repo}/contents/goalkeeper_phys_prep_db.json?ref=main&t=${Date.now()}`;
+            try {
+                const response = await fetch(url, {
+                    headers: getGitHubHeaders(),
+                    cache: 'no-store'
+                });
+                if (response.status === 404) {
+                    return null;
+                }
+                if (!response.ok) {
+                    const errorJson = await response.json().catch(() => ({}));
+                    const errorMsg = errorJson.message || 'No details';
+                    const err = new Error(`HTTP error! status: ${response.status} (${errorMsg})`);
+                    err.status = response.status;
+                    throw err;
+                }
+                const data = await response.json();
+                const decodedContent = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+                let state = JSON.parse(decodedContent);
+
+                // Decrypt remote state if encrypted
+                if (state && state.encrypted) {
+                    let password = getActivePassword();
+                    if (!password) {
+                        password = prompt("Esta base de datos en la nube está protegida y cifrada. Por favor, introduce tu contraseña de acceso para descifrarla:");
+                        if (!password) {
+                            throw new Error("Se requiere la contraseña para descifrar la base de datos.");
+                        }
+                    }
+                    try {
+                        const decryptedStr = await decryptPayload(state, password);
+                        state = JSON.parse(decryptedStr);
+
+                        // Decryption succeeded, cache password locally
+                        window.activePassword = password;
+                        sessionStorage.setItem('cachedSessionKey', password);
+                        localStorage.setItem('cachedUnlockKey', password);
+                    } catch (decErr) {
+                        throw new Error("Contraseña incorrecta. No se pudo descifrar la base de datos.");
+                    }
+                }
+
+                return {
+                    sha: data.sha,
+                    state: state
+                };
+            } catch (e) {
+                console.error("Error fetching remote state:", e);
+                throw e;
+            }
+        }
+
+        async function pushStateToGitHub(sha = null) {
+            const url = `https://api.github.com/repos/${appState.githubSync.username}/${appState.githubSync.repo}/contents/goalkeeper_phys_prep_db.json`;
+
+            const toSave = JSON.parse(JSON.stringify(appState));
+            delete toSave.selectedWeekStart;
+            if (toSave.githubSync) {
+                delete toSave.githubSync.token;
+            }
+
+            let contentStr = JSON.stringify(toSave, null, 2);
+
+            // Encrypt data if password is set
+            const password = getActivePassword();
+            if (password && appState.passwordHash) {
+                try {
+                    const encryptedPayload = await encryptPayload(contentStr, password);
+                    contentStr = JSON.stringify(encryptedPayload, null, 2);
+                } catch (encErr) {
+                    console.error("Encryption failed, pushing unencrypted state as fallback:", encErr);
+                }
+            }
+
+            const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
+
+            const body = {
+                message: "Sincronización de marcas y peso de preparación física",
+                content: base64Content,
+                branch: "main"
+            };
+            if (sha) {
+                body.sha = sha;
+            }
+
+            try {
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: getGitHubHeaders(),
+                    body: JSON.stringify(body)
+                });
+                if (!response.ok) {
+                    const errorJson = await response.json().catch(() => ({}));
+                    const errorMsg = errorJson.message || 'No details';
+                    const err = new Error(`HTTP error! status: ${response.status} (${errorMsg})`);
+                    err.status = response.status;
+                    throw err;
+                }
+                const resData = await response.json();
+                return resData.content.sha;
+            } catch (e) {
+                console.error("Error pushing state to GitHub:", e);
+                throw e;
+            }
+        }
+
+        async function syncWithGitHub(silent = false) {
+            if (isSyncing) return;
+            if (!appState.githubSync || !appState.githubSync.token) return;
+
+            isSyncing = true;
+            updateSyncBadge('syncing', silent ? 'Sincronizando...' : 'Conectando...');
+
+            try {
+                let remoteData = await fetchRemoteState();
+                let remoteSha = null;
+                if (remoteData) {
+                    remoteSha = remoteData.sha;
+                    mergeStates(remoteData.state);
+                }
+
+                try {
+                    const newSha = await pushStateToGitHub(remoteSha);
+                    appState.githubSync.lastSync = new Date().toISOString();
+                    saveState(true); // Silent save local
+                    updateSyncBadge('synced', 'Sincronizado');
+                } catch (pushError) {
+                    // Auto-resolve 409 Conflict
+                    if (pushError.status === 409 || (pushError.message && pushError.message.includes('409'))) {
+                        console.log("Conflict (409) detected. Auto-retrying with latest SHA...");
+                        remoteData = await fetchRemoteState();
+                        if (remoteData) {
+                            remoteSha = remoteData.sha;
+                            mergeStates(remoteData.state);
+                            await pushStateToGitHub(remoteSha);
+                            appState.githubSync.lastSync = new Date().toISOString();
+                            saveState(true);
+                            updateSyncBadge('synced', 'Sincronizado');
+                            return;
+                        }
+                    }
+                    throw pushError;
+                }
+            } catch (e) {
+                console.error("GitHub Sync error:", e);
+                updateSyncBadge('error', 'Error de Sinc.');
+                if (!silent) {
+                    alert("Error al sincronizar con GitHub: " + e.message + "\n\n- Si ves '403 Forbidden', tu token no tiene permisos de ESCRITURA (activa 'repo' o 'Contents: Read & Write').\n- Si ves '401 Unauthorized', tu token es inválido o ha expirado.\n- Si ves '404 Not Found', el usuario o nombre del repositorio son incorrectos.");
+                }
+            } finally {
+                isSyncing = false;
+                updateUI();
+            }
+        }
+
+        async function syncWithGitHubSilent() {
+            await syncWithGitHub(true);
+        }
+
+        function mergeStates(remote) {
+            if (!remote) return;
+
+            // Reparación de objetos remotos o locales corruptos
+            if (remote.weightLogs && !Array.isArray(remote.weightLogs)) remote.weightLogs = Object.values(remote.weightLogs);
+            if (remote.testLogs && !Array.isArray(remote.testLogs)) remote.testLogs = Object.values(remote.testLogs);
+            if (appState.weightLogs && !Array.isArray(appState.weightLogs)) appState.weightLogs = Object.values(appState.weightLogs);
+            if (appState.testLogs && !Array.isArray(appState.testLogs)) appState.testLogs = Object.values(appState.testLogs);
+
+            function mergeObject(localObj, remoteObj) {
+                return Object.assign({}, remoteObj || {}, localObj || {});
+            }
+
+            function mergeArrayByDate(localArr, remoteArr) {
+                const combined = [...(localArr || []), ...(remoteArr || [])];
+                const seen = new Set();
+                const unique = [];
+                for (const item of combined) {
+                    if (item && item.date && !seen.has(item.date)) {
+                        seen.add(item.date);
+                        unique.push(item);
+                    }
+                }
+                unique.sort((a, b) => new Date(a.date) - new Date(b.date));
+                return unique;
+            }
+
+            appState.weightLogs = mergeArrayByDate(appState.weightLogs, remote.weightLogs);
+            if (remote.testLogs) {
+                appState.testLogs = mergeArrayByDate(appState.testLogs, remote.testLogs);
+            }
+            appState.gymLogs = mergeObject(appState.gymLogs, remote.gymLogs);
+            appState.stepsLogs = mergeObject(appState.stepsLogs, remote.stepsLogs);
+            appState.weeklyCalendars = mergeObject(appState.weeklyCalendars, remote.weeklyCalendars);
+            
+            if (remote.profile) {
+                appState.profile = mergeObject(appState.profile, remote.profile);
+                if (appState.profile.target) {
+                    appState.targetWeight = parseFloat(appState.profile.target) || appState.targetWeight;
+                }
+            }
+        }
+
+        function openSyncModal() {
+            document.getElementById('sync-input-username').value = appState.githubSync.username || 'nicomrtnz97';
+            document.getElementById('sync-input-repo').value = appState.githubSync.repo || 'PreparacionSofia';
+            document.getElementById('sync-input-token').value = appState.githubSync.token || '';
+
+            const statusDiv = document.getElementById('sync-modal-status');
+            if (appState.githubSync.token) {
+                statusDiv.innerHTML = `Última sincronización: ${appState.githubSync.lastSync ? new Date(appState.githubSync.lastSync).toLocaleString() : 'Nunca'}`;
+                document.getElementById('btn-sync-disconnect').style.display = 'block';
+                document.getElementById('btn-sync-now').style.display = 'block';
+            } else {
+                statusDiv.innerHTML = 'Estado: No conectado';
+                document.getElementById('btn-sync-disconnect').style.display = 'none';
+                document.getElementById('btn-sync-now').style.display = 'none';
+            }
+
+            document.getElementById('github-sync-modal').style.display = 'flex';
+        }
+
+        function closeSyncModal() {
+            document.getElementById('github-sync-modal').style.display = 'none';
+        }
+
+        async function testAndSaveSync() {
+            let token = document.getElementById('sync-input-token').value.trim();
+            token = token.replace(/[^\x20-\x7E]/g, '');
+            const username = document.getElementById('sync-input-username').value.trim();
+            const repo = document.getElementById('sync-input-repo').value.trim();
+
+            if (!token || !username || !repo) {
+                alert("Por favor, rellena todos los campos.");
+                return;
+            }
+
+            const oldSync = { ...appState.githubSync };
+            appState.githubSync = { token, username, repo, lastSync: '' };
+
+            const statusDiv = document.getElementById('sync-modal-status');
+            statusDiv.innerHTML = "Conectando y validando token...";
+
+            try {
+                const testUrl = `https://api.github.com/repos/${username}/${repo}`;
+                const response = await fetch(testUrl, {
+                    headers: getGitHubHeaders()
+                });
+                if (!response.ok) {
+                    throw new Error(`Repositorio no encontrado o token inválido (HTTP ${response.status})`);
+                }
+
+                statusDiv.innerHTML = "Conexión exitosa. Realizando primera sincronización...";
+                await syncWithGitHub(false);
+                closeSyncModal();
+            } catch (e) {
+                alert("Error al conectar: " + e.message);
+                appState.githubSync = oldSync;
+                openSyncModal();
+            }
+        }
+
+        function disconnectSync() {
+            if (confirm("¿Desconectar la sincronización? Los datos locales se conservarán en este navegador.")) {
+                appState.githubSync = { token: '', username: 'nicomrtnz97', repo: 'PreparacionSofia', lastSync: '' };
+                localStorage.removeItem('cachedUnlockKey');
+                sessionStorage.removeItem('cachedSessionKey');
+                window.activePassword = '';
+                saveState(true);
+                updateSyncBadge('offline', 'GitHub no conectado');
+                closeSyncModal();
+            }
+        }
+
+        async function triggerManualSync() {
+            const btn = document.getElementById('btn-sync-now');
+            btn.disabled = true;
+            btn.innerText = "Sincronizando...";
+            await syncWithGitHub(false);
+            btn.disabled = false;
+            btn.innerText = "Sincronizar Ahora 🔄";
+            openSyncModal();
+        }
+
+        function updateSyncBadge(status, text) {
+            const badge = document.getElementById('github-sync-badge');
+            const dot = document.getElementById('sync-dot');
+            const txt = document.getElementById('sync-text');
+            if (!badge || !dot || !txt) return;
+
+            txt.innerText = text;
+
+            if (status === 'synced') {
+                dot.style.backgroundColor = '#10b981';
+                badge.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                badge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+                badge.style.color = '#a7f3d0';
+            } else if (status === 'syncing') {
+                dot.style.backgroundColor = '#3b82f6';
+                badge.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                badge.style.borderColor = 'rgba(59, 130, 246, 0.2)';
+                badge.style.color = '#bfdbfe';
+            } else if (status === 'pending') {
+                dot.style.backgroundColor = '#f59e0b';
+                badge.style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
+                badge.style.borderColor = 'rgba(245, 158, 11, 0.2)';
+                badge.style.color = '#fde68a';
+            } else if (status === 'error') {
+                dot.style.backgroundColor = '#ef4444';
+                badge.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                badge.style.borderColor = 'rgba(239, 68, 68, 0.2)';
+                badge.style.color = '#fca5a5';
+            } else {
+                dot.style.backgroundColor = '#64748b';
+                badge.style.backgroundColor = 'rgba(148, 163, 184, 0.1)';
+                badge.style.borderColor = 'rgba(148, 163, 184, 0.2)';
+                badge.style.color = '#cbd5e1';
+            }
+        }
+
+        // --- CORE UI UPDATE RENDERER ---
+        function updateUI() {
+            const monDate = new Date(appState.selectedWeekStart + "T00:00:00");
+            const sunDate = new Date(monDate);
+            sunDate.setDate(monDate.getDate() + 6);
+            
+            const monLbl = monDate.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const sunLbl = sunDate.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('week-label-display').innerText = `${monLbl} - ${sunLbl}`;
+
+            const weekNum = getWeekNumber(appState.selectedWeekStart);
+            document.getElementById('week-number-display').innerText = `Semana ${weekNum}`;
+
+            // Update profile badges dynamically
+            if (appState.profile) {
+                const badgeName = document.getElementById('profile-badge-name');
+                const badgeAge = document.getElementById('profile-badge-age');
+                const badgeHeight = document.getElementById('profile-badge-height');
+                const badgeTarget = document.getElementById('profile-badge-target');
+                const titleName = document.getElementById('profile-title-name');
+                const footerName = document.getElementById('profile-footer-name');
+                
+                if (badgeName) badgeName.innerText = appState.profile.name || "Atleta";
+                if (badgeAge) badgeAge.innerText = appState.profile.age || "Edad";
+                if (badgeHeight) badgeHeight.innerText = appState.profile.height || "Altura";
+                if (badgeTarget) badgeTarget.innerText = `Meta: ${appState.targetWeight || 75.0} kg`;
+                if (titleName) titleName.innerText = appState.profile.name ? `para ${appState.profile.name}` : "";
+                if (footerName) footerName.innerText = appState.profile.name || "Atleta";
+
+                // Populate settings fields if empty
+                const inName = document.getElementById('profile-input-name');
+                const inAge = document.getElementById('profile-input-age');
+                const inHeight = document.getElementById('profile-input-height');
+                const inTarget = document.getElementById('profile-input-target');
+
+                if (inName && !inName.value) inName.value = appState.profile.name || "";
+                if (inAge && !inAge.value) inAge.value = appState.profile.age || "";
+                if (inHeight && !inHeight.value) inHeight.value = appState.profile.height || "";
+                if (inTarget && !inTarget.value) inTarget.value = appState.profile.target || "";
+            }
+
+            renderCalendar();
+            renderRoutine();
+            renderWeightTracker();
+            renderStepsTracker();
+            renderDataSync();
+        }
+
+        window.onload = async function() {
+            loadState();
+
+            // Initial check for password lock
+            const locked = await checkLockState();
+            if (locked) {
+                return; // Stop onload execution until unlocked!
+            }
+
+            await proceedWithOnload();
+        };
+
+        async function proceedWithOnload() {
+            if (onloadCompleted) return;
+            onloadCompleted = true;
+
+            await initFileAccess();
+
+            // Silent sync from GitHub on page load if configured
+            if (appState.githubSync && appState.githubSync.token) {
+                try {
+                    await syncWithGitHubSilent();
+                } catch(e) {
+                    console.error("Initial GitHub sync failed:", e);
+                }
+            }
+
+            document.querySelector('.container').style.display = 'block';
+            updateUI();
+
+            // Check if gift modal should pop up (first time only)
+            const alertShown = localStorage.getItem('sofia_gift_alert_shown');
+            if (!alertShown) {
+                document.getElementById('gift-modal').style.display = 'flex';
+                if (appState.profile && appState.profile.name) {
+                    document.getElementById('gift-modal-name').innerText = `¡Hola ${appState.profile.name}!`;
+                }
+            }
+        }
+
+    </script>
+
+    <!-- MODAL DE CONFIGURACIÓN GITHUB SYNC -->
+    <div id="github-sync-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="background: #1e293b; border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 90%; max-width: 400px; color: #fff;">
+            <h3 style="margin-top: 0; color: var(--accent-pink); display: flex; align-items: center; gap: 8px; font-size: 1.1rem;">🔄 Sincronización en la Nube</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 16px;">
+                Conecta tu panel con tu repositorio de GitHub para sincronizar tus marcas y peso entre tus dispositivos (PC y móvil) de forma automática.
+            </p>
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">Usuario de GitHub:</label>
+                <input type="text" id="sync-input-username" style="width: 100%; background: #0f172a; border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.85rem;" placeholder="nicomrtnz97">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">Nombre del Repositorio:</label>
+                <input type="text" id="sync-input-repo" style="width: 100%; background: #0f172a; border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.85rem;" placeholder="PreparacionSofia">
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">Personal Access Token (PAT):</label>
+                <input type="password" id="sync-input-token" style="width: 100%; background: #0f172a; border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.85rem;" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                <a href="https://github.com/settings/tokens/new?description=SofiaPrepSync&scopes=repo" target="_blank" style="font-size: 0.7rem; color: var(--accent-pink); display: inline-block; margin-top: 4px; text-decoration: underline;">Generar Token en GitHub (requiere permiso 'repo')</a>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 16px;" id="sync-modal-status"></div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeSyncModal()" style="font-size: 0.8rem; padding: 6px 12px;">Cancelar</button>
+                <button class="btn btn-primary" onclick="testAndSaveSync()" style="font-size: 0.8rem; padding: 6px 12px;">Guardar y Conectar</button>
+            </div>
+            <div style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-danger" onclick="disconnectSync()" id="btn-sync-disconnect" style="font-size: 0.75rem; padding: 4px 8px; display: none;">Desconectar</button>
+                <button class="btn btn-success" onclick="triggerManualSync()" id="btn-sync-now" style="font-size: 0.75rem; padding: 4px 8px; display: none;">Sincronizar Ahora 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE BLOQUEO DE CONTRASEÑA -->
+    <div id="dashboard-lock-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #080a11; z-index: 9999; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; overflow-y: auto; padding: 20px 0;">
+        <div style="background: rgba(17, 21, 36, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 35px 28px; width: 90%; max-width: 420px; text-align: center; backdrop-filter: blur(16px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); color: #fff; margin: auto;">
+            <div style="width: 56px; height: 56px; background: rgba(236, 72, 153, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <h2 id="lock-title" style="margin-top: 0; margin-bottom: 8px; font-size: 1.3rem; font-weight: 700; color: #fff;">Panel Protegido</h2>
+            <p id="lock-subtitle" style="font-size: 0.8rem; color: #94a3b8; line-height: 1.5; margin-bottom: 20px;">Introduce tu contraseña para acceder a la preparación física.</p>
+
+            <!-- FORMULARIO DE INICIO DE SESIÓN -->
+            <div id="lock-login-form" style="display: none;">
+                <div style="margin-bottom: 16px; text-align: left;">
+                    <input type="password" id="lock-password-input" placeholder="Introduce la contraseña" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 16px; color: #fff; font-size: 0.95rem; outline: none; transition: border-color 0.2s;" onkeydown="if(event.key==='Enter') unlockDashboard()">
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; text-align: left; cursor: pointer;" onclick="toggleRememberMe()">
+                    <input type="checkbox" id="lock-remember-checkbox" style="width: 16px; height: 16px; accent-color: #db2777; cursor: pointer;">
+                    <label style="font-size: 0.8rem; color: #94a3b8; user-select: none; cursor: pointer;">Recordarme en este dispositivo</label>
+                </div>
+                <button class="btn" onclick="unlockDashboard()" style="width: 100%; padding: 12px; font-size: 0.95rem; font-weight: 700; border-radius: 12px; background: linear-gradient(90deg, #db2777, #7c3aed); border: none; cursor: pointer; color: #fff;">Desbloquear</button>
+            </div>
+
+            <!-- FORMULARIO DE PRIMERA CONFIGURACIÓN (CONTRASEÑA + PERFIL ATLETA) -->
+            <div id="lock-setup-form" style="display: none; text-align: left;">
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Nombre de la Atleta:</label>
+                    <input type="text" id="lock-setup-name" placeholder="ej. Sofía" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                    <div style="flex: 1;">
+                        <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Edad / Datos (ej. 25 años):</label>
+                        <input type="text" id="lock-setup-age" placeholder="ej. 25 años" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Altura (ej. 1.65 m):</label>
+                        <input type="text" id="lock-setup-height" placeholder="ej. 1.65 m" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <div style="flex: 1;">
+                        <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Peso Inicial (kg):</label>
+                        <input type="number" id="lock-setup-initialweight" placeholder="ej. 90.0" step="0.1" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Peso Objetivo (kg):</label>
+                        <input type="number" id="lock-setup-target" placeholder="ej. 75.0" step="0.1" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;">
+                    </div>
+                </div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; margin-bottom: 16px;">
+                    <div style="margin-bottom: 12px;">
+                        <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Crear Contraseña:</label>
+                        <input type="password" id="lock-new-password" placeholder="Mínimo 4 caracteres" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:4px;">Confirmar Contraseña:</label>
+                        <input type="password" id="lock-confirm-password" placeholder="Repite la contraseña" style="width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none;" onkeydown="if(event.key==='Enter') setupNewPassword()">
+                    </div>
+                </div>
+                <button class="btn" onclick="setupNewPassword()" style="width: 100%; padding: 12px; font-size: 0.95rem; font-weight: 700; border-radius: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; cursor: pointer; color: #fff; text-align: center;">Crear Perfil y Contraseña 🚀</button>
+            </div>
+            <div id="lock-error-msg" style="color: #ef4444; font-size: 0.8rem; margin-top: 16px; font-weight: 600; display: none; text-align: center;"></div>
+        </div>
+    </div>
+
+</body>
+</html>

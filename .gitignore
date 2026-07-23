@@ -1,0 +1,8 @@
+# Archivos del sistema y temporales
+.gemini/
+*.log
+*.tmp
+*.backup
+.DS_Store
+Thumbs.db
+node_modules/
